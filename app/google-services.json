@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "915364906778",
+    "project_id": "mychatapp-55409",
+    "storage_bucket": "mychatapp-55409.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915364906778:android:6029e3cac394ece69e0ea3",
+        "android_client_info": {
+          "package_name": "com.themarto.mychatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "915364906778-fqhm4kmd43ij0pcacj7t3i7lgq5qvlpb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.themarto.mychatapp",
+            "certificate_hash": "3b77975431a3b3373e455956eb4997a92fc06b1f"
+          }
+        },
+        {
+          "client_id": "915364906778-hl38u8t2dln8afinjb6h3ghgk27v309g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDi41KysWz0Xx6oXnzSEjtQfWeCrVgryM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "915364906778-hl38u8t2dln8afinjb6h3ghgk27v309g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

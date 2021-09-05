@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(@NonNull @org.jetbrains.annotations.NotNull FirebaseException e) {
-                // Todo: reinstall the app and login causes an error
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     // Invalid request
                     Toast.makeText(getApplicationContext(), "Invalid phone number", Toast.LENGTH_SHORT).show();

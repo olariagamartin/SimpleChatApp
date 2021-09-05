@@ -46,7 +46,7 @@ public class OtpAuthentication extends AppCompatActivity {
         binding.verifyOtpBtn.setOnClickListener(v -> {
             enterOtp = binding.otpEditText.getText().toString();
             if (enterOtp.isEmpty()) {
-                Toast.makeText(getApplicationContext(), "Introduce the you received", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Introduce the code you received", Toast.LENGTH_SHORT).show();
             } else {
                 binding.verifingOtpProgress.setVisibility(View.VISIBLE);
                 String codeReceived = getIntent().getStringExtra("otp");

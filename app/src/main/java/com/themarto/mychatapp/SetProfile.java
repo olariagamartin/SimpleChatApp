@@ -94,6 +94,7 @@ public class SetProfile extends AppCompatActivity {
 
     private void sendDataForNewUser () {
         sendDataToRealtimeDatabase();
+        sendImageToStorage();
     }
 
     private void sendDataToRealtimeDatabase() {
@@ -105,7 +106,6 @@ public class SetProfile extends AppCompatActivity {
         UserProfile userProfile = new UserProfile(username, firebaseAuth.getUid());
         databaseReference.setValue(userProfile);
         Toast.makeText(getApplicationContext(), "User Profile dded successfully", Toast.LENGTH_SHORT).show();
-        sendImageToStorage();
     }
 
     private void sendImageToStorage () {
@@ -114,17 +114,7 @@ public class SetProfile extends AppCompatActivity {
                 .child(firebaseAuth.getUid())
                 .child("profile image");
 
-        // Image compression
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
-        byte[] data = byteArrayOutputStream.toByteArray();
+        byte[] data = getCompressedImage();
 
         // putting image to storage
         UploadTask uploadTask = imageRef.putBytes(data);
@@ -143,6 +133,19 @@ public class SetProfile extends AppCompatActivity {
         }).addOnFailureListener(e -> {
             Toast.makeText(getApplicationContext(), "Image no uploaded", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private byte[] getCompressedImage() {
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 
     private void sendDataToCloudFirestore() {

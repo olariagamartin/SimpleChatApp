@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,15 +13,23 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.firebase.udacity.mychatapp.databinding.ActivitySetProfileBinding;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SetProfile extends AppCompatActivity {
 
     private ActivitySetProfileBinding binding;
-    private static int PICK_IMAGE = 123;
     private Uri imagePath;
 
     private FirebaseAuth firebaseAuth;
@@ -89,6 +98,69 @@ public class SetProfile extends AppCompatActivity {
 
     private void sendDataToRealtimeDatabase() {
         // to send data to realtime db we need a class
+        username = binding.userName.getText().toString().trim();
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
+
+        UserProfile userProfile = new UserProfile(username, firebaseAuth.getUid());
+        databaseReference.setValue(userProfile);
+        Toast.makeText(getApplicationContext(), "User Profile dded successfully", Toast.LENGTH_SHORT).show();
+        sendImageToStorage();
+    }
+
+    private void sendImageToStorage () {
+        StorageReference imageRef = storageReference
+                .child("images")
+                .child(firebaseAuth.getUid())
+                .child("profile image");
+
+        // Image compression
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
+        byte[] data = byteArrayOutputStream.toByteArray();
+
+        // putting image to storage
+        UploadTask uploadTask = imageRef.putBytes(data);
+
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                imageUriAccessToken = uri.toString();
+                Toast.makeText(getApplicationContext(), "URI get success", Toast.LENGTH_SHORT).show();
+                sendDataToCloudFirestore();
+            }).addOnFailureListener(e -> {
+                Toast.makeText(getApplicationContext(), "URI get failed", Toast.LENGTH_SHORT).show();
+            });
+
+            Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_SHORT).show();
+
+        }).addOnFailureListener(e -> {
+            Toast.makeText(getApplicationContext(), "Image no uploaded", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void sendDataToCloudFirestore() {
+        DocumentReference documentReference = firebaseFirestore
+                .collection("users")
+                .document(firebaseAuth.getUid());
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("name", username);
+        userData.put("image", imageUriAccessToken);
+        userData.put("uid", firebaseAuth.getUid());
+        userData.put("status", "Online");
+
+        documentReference.set(userData).addOnSuccessListener(unused -> {
+            Toast.makeText(getApplicationContext(),
+                    "Data on Cloud Firestore send success",
+                    Toast.LENGTH_SHORT).show();
+        });
     }
 
 }

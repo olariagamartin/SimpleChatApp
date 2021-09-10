@@ -87,7 +87,14 @@ public class UpdateProfile extends AppCompatActivity {
     }
 
     private void updateUsername(String username) {
-        Toast.makeText(getApplicationContext(), "It works", Toast.LENGTH_SHORT).show();
+        DocumentReference documentReference = firebaseFirestore
+                .collection("users")
+                .document(firebaseAuth.getUid());
+
+        documentReference.update("name", username)
+                .addOnSuccessListener(unused -> {
+                    binding.username.setText(username);
+                });
     }
 
 }

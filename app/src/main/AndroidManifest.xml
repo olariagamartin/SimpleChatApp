@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyChatApp">
-        <activity android:name="com.themarto.mychatapp.ChatActivity"></activity>
+        <activity
+            android:name="com.themarto.mychatapp.UpdateProfile"
+            android:exported="true" />
+        <activity android:name="com.themarto.mychatapp.ChatActivity" />
         <activity android:name="com.themarto.mychatapp.SetProfile" />
         <activity android:name="com.themarto.mychatapp.OtpAuthentication" />
         <activity android:name="com.themarto.mychatapp.MainActivity" />

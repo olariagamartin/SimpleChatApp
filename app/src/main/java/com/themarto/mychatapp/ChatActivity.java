@@ -2,8 +2,10 @@ package com.themarto.mychatapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -76,6 +78,7 @@ public class ChatActivity extends AppCompatActivity {
         };
 
         binding.chatList.setAdapter(chatAdapter);
+        binding.chatList.setLayoutManager(new CustomLinearLayoutManager(getApplicationContext()));
 
         setOptionMenu();
 
@@ -88,6 +91,19 @@ public class ChatActivity extends AppCompatActivity {
         public ChatHolder(@NonNull View itemView) {
             super(itemView);
             binding = ChatItemviewBinding.bind(itemView);
+        }
+    }
+
+    public class CustomLinearLayoutManager extends LinearLayoutManager {
+        public CustomLinearLayoutManager(Context context) {
+            super(context);
+        }
+
+        //Generate constructors
+
+        @Override
+        public boolean supportsPredictiveItemAnimations() {
+            return false;
         }
     }
 

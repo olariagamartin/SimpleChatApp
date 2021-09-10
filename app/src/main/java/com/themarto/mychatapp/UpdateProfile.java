@@ -148,6 +148,7 @@ public class UpdateProfile extends AppCompatActivity {
         byte[] data = getCompressedImage();
 
         UploadTask uploadTask = imageRef.putBytes(data);
+        binding.progressBar.setVisibility(View.VISIBLE);
 
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -186,6 +187,7 @@ public class UpdateProfile extends AppCompatActivity {
         documentReference.update("image", link)
                 .addOnSuccessListener(unused -> {
                     binding.profileImage.setImageURI(imagePath);
+                    binding.progressBar.setVisibility(View.INVISIBLE);
                 });
     }
 

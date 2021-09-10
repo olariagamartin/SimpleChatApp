@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -75,6 +77,8 @@ public class ChatActivity extends AppCompatActivity {
 
         binding.chatList.setAdapter(chatAdapter);
 
+        setOptionMenu();
+
     }
 
     public class ChatHolder extends RecyclerView.ViewHolder{
@@ -85,5 +89,14 @@ public class ChatActivity extends AppCompatActivity {
             super(itemView);
             binding = ChatItemviewBinding.bind(itemView);
         }
+    }
+
+    private void setOptionMenu() {
+        MenuItem profile = binding.toolbar.getMenu().add("Profile");
+        profile.setOnMenuItemClickListener(item -> {
+            Intent intent = new Intent(ChatActivity.this, UpdateProfile.class);
+            startActivity(intent);
+            return true;
+        });
     }
 }

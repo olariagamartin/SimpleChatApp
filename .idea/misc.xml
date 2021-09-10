@@ -7,7 +7,9 @@
         <entry key="..\:/Users/marti/AndroidStudioProjects/YouTube/MyChatApp/app/src/main/res/layout/activity_main.xml" value="0.18070652173913043" />
         <entry key="..\:/Users/marti/AndroidStudioProjects/YouTube/MyChatApp/app/src/main/res/layout/activity_set_profile.xml" value="0.18070652173913043" />
         <entry key="..\:/Users/marti/AndroidStudioProjects/YouTube/MyChatApp/app/src/main/res/layout/activity_update_profile.xml" value="0.209375" />
+        <entry key="..\:/Users/marti/AndroidStudioProjects/YouTube/MyChatApp/app/src/main/res/layout/bottom_sheet_edit_username.xml" value="0.209375" />
         <entry key="..\:/Users/marti/AndroidStudioProjects/YouTube/MyChatApp/app/src/main/res/layout/chat_itemview.xml" value="0.5" />
+        <entry key="..\:/Users/marti/AndroidStudioProjects/YouTube/MyChatApp/app/src/main/res/layout/dialog_update_username.xml" value="0.209375" />
       </map>
     </option>
   </component>

@@ -36,6 +36,7 @@
         app:layout_constraintTop_toTopOf="@+id/username" />
 
     <ImageView
+        android:id="@+id/edit_username"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="10dp"

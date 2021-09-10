@@ -99,8 +99,6 @@ public class ChatActivity extends AppCompatActivity {
             super(context);
         }
 
-        //Generate constructors
-
         @Override
         public boolean supportsPredictiveItemAnimations() {
             return false;

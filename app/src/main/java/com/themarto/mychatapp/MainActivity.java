@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.udacity.mychatapp.R;
 import com.google.firebase.udacity.mychatapp.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToChatActivity () {
-        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+        Intent intent = new Intent(MainActivity.this, ChatListActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

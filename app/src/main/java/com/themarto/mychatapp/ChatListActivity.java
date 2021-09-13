@@ -20,15 +20,14 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.auth.User;
 import com.google.firebase.udacity.mychatapp.R;
-import com.google.firebase.udacity.mychatapp.databinding.ActivityChatBinding;
+import com.google.firebase.udacity.mychatapp.databinding.ActivityChatListBinding;
 import com.google.firebase.udacity.mychatapp.databinding.ChatItemviewBinding;
 import com.squareup.picasso.Picasso;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatListActivity extends AppCompatActivity {
 
-    private ActivityChatBinding binding;
+    private ActivityChatListBinding binding;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
@@ -37,7 +36,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityChatBinding.inflate(getLayoutInflater());
+        binding = ActivityChatListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -112,7 +111,7 @@ public class ChatActivity extends AppCompatActivity {
     private void setOptionMenu() {
         MenuItem profile = binding.toolbar.getMenu().add("Profile");
         profile.setOnMenuItemClickListener(item -> {
-            Intent intent = new Intent(ChatActivity.this, UpdateProfile.class);
+            Intent intent = new Intent(ChatListActivity.this, UpdateProfile.class);
             startActivity(intent);
             return true;
         });

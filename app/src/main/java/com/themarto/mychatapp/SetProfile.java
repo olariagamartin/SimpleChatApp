@@ -85,7 +85,7 @@ public class SetProfile extends AppCompatActivity {
                 binding.saveProfileProgress.setVisibility(View.VISIBLE);
                 sendDataForNewUser();
                 binding.saveProfileProgress.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(SetProfile.this, ChatActivity.class);
+                Intent intent = new Intent(SetProfile.this, ChatListActivity.class);
                 startActivity(intent);
                 finish();
             }

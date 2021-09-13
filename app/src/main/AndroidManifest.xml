@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyChatApp">
         <activity
+            android:name="com.themarto.mychatapp.ChatActivity"
+            android:exported="true" />
+        <activity
             android:name="com.themarto.mychatapp.UpdateProfile"
             android:exported="true" />
         <activity android:name="com.themarto.mychatapp.ChatListActivity" />

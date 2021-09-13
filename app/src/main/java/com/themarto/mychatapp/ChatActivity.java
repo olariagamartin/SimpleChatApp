@@ -43,7 +43,11 @@ public class ChatActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        Query query = firebaseFirestore.collection("users");
+        //Query query = firebaseFirestore.collection("users");
+        // fetch all users except me
+        Query query = firebaseFirestore.collection("users")
+                .whereNotEqualTo("uid", firebaseAuth.getUid());
+
         FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
                 .setQuery(query, UserModel.class)
                 .setLifecycleOwner(this)

@@ -67,8 +67,8 @@ public class ChatListActivity extends AppCompatActivity {
                 }
 
                 holder.itemView.setOnClickListener(v -> {
-                    Toast.makeText(getApplicationContext(), "Open chat", Toast.LENGTH_SHORT)
-                            .show();
+                    Intent intent = new Intent(ChatListActivity.this, ChatActivity.class);
+                    startActivity(intent);
                 });
             }
 

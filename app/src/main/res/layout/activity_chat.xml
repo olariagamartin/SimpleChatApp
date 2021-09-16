@@ -82,7 +82,7 @@
             android:layout_height="48dp"
             android:inputType="textCapSentences"
             android:layout_marginHorizontal="5dp"
-            android:background="@drawable/message_background"
+            android:background="@drawable/message_field_background"
             android:hint="Type a message"
             android:paddingStart="20dp"
             android:paddingEnd="10dp"

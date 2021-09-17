@@ -68,6 +68,9 @@ public class ChatListActivity extends AppCompatActivity {
 
                 holder.itemView.setOnClickListener(v -> {
                     Intent intent = new Intent(ChatListActivity.this, ChatActivity.class);
+                    intent.putExtra("receiverName", model.name);
+                    intent.putExtra("receiverImageUrl", model.getImage());
+                    intent.putExtra("receiverUid", model.getUid());
                     startActivity(intent);
                 });
             }

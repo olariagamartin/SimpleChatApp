@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
 
-import com.google.firebase.udacity.mychatapp.R;
-
 public class SplashScreen extends AppCompatActivity {
 
     private static int SPLASH_TIME = 1000;

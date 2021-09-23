@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.udacity.mychatapp.databinding.ActivityMainBinding;
+import com.themarto.mychatapp.databinding.ActivityMainBinding;
 
 import org.jetbrains.annotations.NotNull;
 

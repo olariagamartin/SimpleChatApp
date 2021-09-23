@@ -1,10 +1,5 @@
 package com.themarto.mychatapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,17 +8,20 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.udacity.mychatapp.R;
-import com.google.firebase.udacity.mychatapp.databinding.ActivityChatListBinding;
-import com.google.firebase.udacity.mychatapp.databinding.ChatItemviewBinding;
 import com.squareup.picasso.Picasso;
+import com.themarto.mychatapp.databinding.ActivityChatListBinding;
+import com.themarto.mychatapp.databinding.ChatItemviewBinding;
 
 public class ChatListActivity extends AppCompatActivity {
 

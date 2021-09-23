@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.udacity.mychatapp.databinding.ActivityOtpAuthenticationBinding;
+import com.themarto.mychatapp.databinding.ActivityOtpAuthenticationBinding;
 
 public class OtpAuthentication extends AppCompatActivity {
 

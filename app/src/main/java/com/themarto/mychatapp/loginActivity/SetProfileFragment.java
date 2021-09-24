@@ -105,19 +105,7 @@ public class SetProfileFragment extends Fragment {
     }
 
     private void sendDataForNewUser () {
-        sendDataToRealtimeDatabase();
         sendImageToStorage();
-    }
-
-    private void sendDataToRealtimeDatabase() {
-        // to send data to realtime db we need a class
-        username = binding.userName.getText().toString().trim();
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
-
-        UserProfile userProfile = new UserProfile(username, firebaseAuth.getUid());
-        databaseReference.setValue(userProfile);
-        Toast.makeText(requireContext(), "User Profile dded successfully", Toast.LENGTH_SHORT).show();
     }
 
     private void sendImageToStorage () {

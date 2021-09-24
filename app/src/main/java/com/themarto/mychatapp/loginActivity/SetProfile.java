@@ -1,4 +1,4 @@
-package com.themarto.mychatapp;
+package com.themarto.mychatapp.loginActivity;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,6 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.themarto.mychatapp.ChatListActivity;
+import com.themarto.mychatapp.UserProfile;
 import com.themarto.mychatapp.databinding.ActivitySetProfileBinding;
 
 import java.io.ByteArrayOutputStream;

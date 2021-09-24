@@ -1,4 +1,4 @@
-package com.themarto.mychatapp;
+package com.themarto.mychatapp.loginActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,7 +35,7 @@ public class OtpAuthentication extends AppCompatActivity {
 
     private void setChangeNumberTextListener() {
         binding.changeNumber.setOnClickListener(v -> {
-            Intent intent = new Intent(OtpAuthentication.this, MainActivity.class);
+            Intent intent = new Intent(OtpAuthentication.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         });

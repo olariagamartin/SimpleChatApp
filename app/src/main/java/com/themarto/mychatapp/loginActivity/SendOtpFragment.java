@@ -1,12 +1,15 @@
-package com.themarto.mychatapp;
+package com.themarto.mychatapp.loginActivity;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
@@ -16,16 +19,16 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.themarto.mychatapp.databinding.ActivityMainBinding;
+import com.themarto.mychatapp.databinding.FragmentSendOtpBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity {
+public class SendOtpFragment extends Fragment {
 
     private static final int PHONE_NUMBER_LENGTH = 10;
-    private ActivityMainBinding binding;
+    private FragmentSendOtpBinding binding;
     String countryCode;
     String phoneNumber;
 
@@ -35,17 +38,23 @@ public class MainActivity extends AppCompatActivity {
     String codeSent;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
         firebaseAuth = FirebaseAuth.getInstance();
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentSendOtpBinding.inflate(inflater, container, false);
 
         countryCode = binding.countryCodePicker.getSelectedCountryCodeWithPlus();
         setCountryCodeListener();
         setSendOtpButtonListener();
         setPhoneVerificationStateCallback();
+
+        return binding.getRoot();
     }
 
     private void setCountryCodeListener() {
@@ -58,12 +67,12 @@ public class MainActivity extends AppCompatActivity {
         binding.sendMessageBtn.setOnClickListener(v -> {
             String number = binding.phoneNumber.getText().toString();
             if (number.isEmpty()) {
-                Toast.makeText(getApplicationContext(),
+                Toast.makeText(requireContext(),
                         "Please enter your number",
                         Toast.LENGTH_SHORT).show();
             }
             else if (number.length() < PHONE_NUMBER_LENGTH) {
-                Toast.makeText(getApplicationContext(),
+                Toast.makeText(requireContext(),
                         "Please enter a valid number",
                         Toast.LENGTH_SHORT).show();
             } else {
@@ -73,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 PhoneAuthOptions phoneAuthOptions = PhoneAuthOptions.newBuilder(firebaseAuth)
                         .setPhoneNumber(phoneNumber)
                         .setTimeout(60L, TimeUnit.SECONDS)
-                        .setActivity(MainActivity.this)
+                        .setActivity(requireActivity()) //todo: test, MainActivity.this changed to requireActivity
                         .setCallbacks(phoneVerificationStateCallback)
                         .build();
 
@@ -93,13 +102,15 @@ public class MainActivity extends AppCompatActivity {
             public void onVerificationFailed(@NonNull @org.jetbrains.annotations.NotNull FirebaseException e) {
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     // Invalid request
-                    Toast.makeText(getApplicationContext(), "Invalid phone number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Invalid phone number", Toast.LENGTH_SHORT).show();
                 } else if (e instanceof FirebaseTooManyRequestsException) {
                     // The SMS quota for the project has been exceeded
                     Snackbar.make(binding.phoneNumber, "Quota exceeded.",
                             Snackbar.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+
+                    e.printStackTrace();
                 }
             }
 
@@ -107,31 +118,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCodeSent(@NonNull @NotNull String s, @NonNull @NotNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
-                Toast.makeText(getApplicationContext(), "Code was sent to your phone", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Code was sent to your phone", Toast.LENGTH_SHORT).show();
                 binding.sendingOtpProgress.setVisibility(View.INVISIBLE);
                 codeSent = s; // save the code that was sent to the user for verification
-                goToOtpAuthActivity(codeSent);
+                goToEnterOtpFragment(codeSent);
             }
         };
     }
 
-    private void goToOtpAuthActivity(String code) {
-        Intent intent = new Intent(MainActivity.this, OtpAuthentication.class);
-        intent.putExtra("otp", code);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            goToChatActivity();
-        }
-    }
-
-    private void goToChatActivity () {
-        Intent intent = new Intent(MainActivity.this, ChatListActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+    private void goToEnterOtpFragment(String code) {
+        SendOtpFragmentDirections.ActionSendOtpFragmentToEnterOtpFragment action =
+                SendOtpFragmentDirections.actionSendOtpFragmentToEnterOtpFragment(code);
+        Navigation.findNavController(binding.getRoot()).navigate(action);
     }
 }

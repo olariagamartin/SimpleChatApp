@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/login_nav_graph"
+    app:startDestination="@id/sendOtpFragment">
+
+    <fragment
+        android:id="@+id/sendOtpFragment"
+        android:name="com.themarto.mychatapp.loginActivity.SendOtpFragment"
+        android:label="SendOtpFragment" >
+        <action
+            android:id="@+id/action_sendOtpFragment_to_enterOtpFragment"
+            app:destination="@id/enterOtpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/enterOtpFragment"
+        android:name="com.themarto.mychatapp.loginActivity.EnterOtpFragment"
+        android:label="EnterOtpFragment" >
+        <action
+            android:id="@+id/action_enterOtpFragment_to_setProfileFragment"
+            app:destination="@id/setProfileFragment"
+            app:popUpTo="@id/enterOtpFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="otp"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/setProfileFragment"
+        android:name="com.themarto.mychatapp.loginActivity.SetProfileFragment"
+        android:label="SetProfileFragment" />
+</navigation>

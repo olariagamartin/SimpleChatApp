@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context="com.themarto.mychatapp.MainActivity">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/icon_image"
@@ -23,55 +21,54 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30dp"
-        android:text="Chat App will send OTP to your entered number"
+        android:text="Enter the OTP you received"
         android:textAlignment="center"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/icon_image"
         tools:layout_editor_absoluteX="0dp" />
 
-    <com.hbb20.CountryCodePicker
-        android:id="@+id/countryCodePicker"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/otp_edit_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        app:ccp_areaCodeDetectedCountry="true"
-        app:ccp_autoDetectCountry="true"
+        android:layout_marginTop="25dp"
+        android:inputType="number"
+        android:hint="OTP here"
+        android:layout_marginHorizontal="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <EditText
-        android:id="@+id/phone_number"
+    <TextView
+        android:id="@+id/change_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:inputType="phone"
-        android:hint="Enter your number"
-        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="15dp"
+        android:text="Ditn't received? Chage your number"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countryCodePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/otp_edit_text" />
 
     <Button
-        android:id="@+id/send_message_btn"
+        android:id="@+id/verify_otp_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Message"
-        android:layout_marginTop="40dp"
+        android:text="Verify"
+        android:layout_marginTop="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_number" />
+        app:layout_constraintTop_toBottomOf="@+id/change_number" />
 
     <ProgressBar
-        android:id="@+id/sending_otp_progress"
+        android:id="@+id/verifing_otp_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/send_message_btn" />
-
+        app:layout_constraintTop_toBottomOf="@+id/verify_otp_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

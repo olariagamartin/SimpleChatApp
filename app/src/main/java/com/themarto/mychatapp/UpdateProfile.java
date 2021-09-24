@@ -79,6 +79,7 @@ public class UpdateProfile extends AppCompatActivity {
                 .document(firebaseAuth.getUid());
 
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            // todo: check for null object
             user = documentSnapshot.toObject(UserModel.class);
             loadUserData();
         }).addOnFailureListener(e -> {

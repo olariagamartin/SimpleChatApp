@@ -100,7 +100,6 @@ public class SetProfileFragment extends Fragment {
                 binding.saveProfileProgress.setVisibility(View.VISIBLE);
                 sendDataForNewUser();
                 binding.saveProfileProgress.setVisibility(View.INVISIBLE); // todo
-                goToMainActivity();
             }
         });
     }
@@ -176,6 +175,7 @@ public class SetProfileFragment extends Fragment {
             Toast.makeText(requireContext(),
                     "Data on Cloud Firestore send success",
                     Toast.LENGTH_SHORT).show();
+            goToMainActivity();
         });
     }
 

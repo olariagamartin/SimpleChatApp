@@ -13,7 +13,7 @@ import com.themarto.mychatapp.loginActivity.LoginActivity;
 
 public class SplashScreen extends AppCompatActivity {
 
-    private static int SPLASH_TIME = 3000;
+    private static int SPLASH_TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

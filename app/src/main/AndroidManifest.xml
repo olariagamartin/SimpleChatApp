@@ -15,7 +15,7 @@
         <activity
             android:name="com.themarto.mychatapp.UpdateProfile"
             android:exported="true" />
-        <activity android:name="com.themarto.mychatapp.ChatListActivity" />
+        <activity android:name="com.themarto.mychatapp.MainActivity" />
         <activity android:name="com.themarto.mychatapp.loginActivity.SetProfile" />
         <activity android:name="com.themarto.mychatapp.loginActivity.OtpAuthentication" />
         <activity android:name="com.themarto.mychatapp.loginActivity.LoginActivity" />

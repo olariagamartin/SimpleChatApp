@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.themarto.mychatapp.ChatListActivity;
+import com.themarto.mychatapp.MainActivity;
 import com.themarto.mychatapp.UserProfile;
 import com.themarto.mychatapp.databinding.ActivitySetProfileBinding;
 
@@ -87,7 +87,7 @@ public class SetProfile extends AppCompatActivity {
                 binding.saveProfileProgress.setVisibility(View.VISIBLE);
                 sendDataForNewUser();
                 binding.saveProfileProgress.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(SetProfile.this, ChatListActivity.class);
+                Intent intent = new Intent(SetProfile.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }

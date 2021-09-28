@@ -18,17 +18,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.themarto.mychatapp.ChatListActivity;
-import com.themarto.mychatapp.R;
-import com.themarto.mychatapp.SplashScreen;
-import com.themarto.mychatapp.UserProfile;
+import com.themarto.mychatapp.MainActivity;
 import com.themarto.mychatapp.databinding.FragmentSetProfileBinding;
 
 import java.io.ByteArrayOutputStream;
@@ -169,7 +164,7 @@ public class SetProfileFragment extends Fragment {
 
     private void goToMainActivity() {
         // todo: test backstack
-        Intent intent = new Intent(requireActivity(), ChatListActivity.class);
+        Intent intent = new Intent(requireActivity(), MainActivity.class);
         startActivity(intent);
         requireActivity().finish();
     }

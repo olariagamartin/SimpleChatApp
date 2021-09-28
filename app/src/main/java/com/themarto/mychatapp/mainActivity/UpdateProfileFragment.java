@@ -48,6 +48,7 @@ public class UpdateProfileFragment extends Fragment {
 
     private Uri imagePath;
 
+    // todo: test
     private ActivityResultLauncher<Intent> pickPhotoLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {

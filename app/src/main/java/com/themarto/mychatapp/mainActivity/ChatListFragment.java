@@ -1,12 +1,13 @@
 package com.themarto.mychatapp.mainActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,12 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
-import com.themarto.mychatapp.ChatActivity;
-import com.themarto.mychatapp.ChatListActivity;
 import com.themarto.mychatapp.R;
-import com.themarto.mychatapp.UpdateProfile;
 import com.themarto.mychatapp.UserModel;
-import com.themarto.mychatapp.databinding.ActivityChatListBinding;
 import com.themarto.mychatapp.databinding.ChatItemviewBinding;
 import com.themarto.mychatapp.databinding.FragmentChatListBinding;
 
@@ -76,7 +73,13 @@ public class ChatListFragment extends Fragment {
                 }
 
                 holder.itemView.setOnClickListener(v -> {
-                    // todo: go to chat
+                    // todo: test
+                    NavDirections action = ChatListFragmentDirections
+                            .actionChatListFragmentToChatFragment(
+                                    model.getUid(),
+                                    model.getName(),
+                                    model.getImage());
+                    Navigation.findNavController(binding.getRoot()).navigate(action);
                     /*Intent intent = new Intent(ChatListActivity.this, ChatActivity.class);
                     intent.putExtra("receiverName", model.name);
                     intent.putExtra("receiverImageUrl", model.getImage());
@@ -125,7 +128,10 @@ public class ChatListFragment extends Fragment {
     private void setOptionMenu() {
         MenuItem profile = binding.toolbar.getMenu().add("Profile");
         profile.setOnMenuItemClickListener(item -> {
-            // todo: go to update profile
+            // todo: test
+            NavDirections action = ChatListFragmentDirections
+                    .actionChatListFragmentToUpdateProfileFragment();
+            Navigation.findNavController(binding.getRoot()).navigate(action);
             /*Intent intent = new Intent(ChatListActivity.this, UpdateProfile.class);
             startActivity(intent);*/
             return true;

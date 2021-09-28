@@ -42,7 +42,7 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private void goToMainActivity() {
-        Intent intent = new Intent(SplashScreen.this, ChatListActivity.class);
+        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

@@ -1,12 +1,9 @@
 package com.themarto.mychatapp.loginActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.themarto.mychatapp.ChatListActivity;
 import com.themarto.mychatapp.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {

@@ -19,7 +19,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.themarto.mychatapp.MessageAdapter;
 import com.themarto.mychatapp.MessageModel;
-import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.databinding.FragmentChatBinding;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class ChatFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        loadExtra();
+        loadArgs();
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -92,11 +91,11 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    private void loadExtra () {
-        // todo: load received data
-        /*receiverName = getIntent().getStringExtra("receiverName");
-        receiverImageLink = getIntent().getStringExtra("receiverImageUrl");
-        receiverUid = getIntent().getStringExtra("receiverUid");*/
+    private void loadArgs() {
+        ChatFragmentArgs args = ChatFragmentArgs.fromBundle(getArguments());
+        receiverName = args.getReceiverName();
+        receiverImageLink = args.getReceiverImage();
+        receiverUid = args.getReceiverUid();
     }
 
     private void setupToolbar () {

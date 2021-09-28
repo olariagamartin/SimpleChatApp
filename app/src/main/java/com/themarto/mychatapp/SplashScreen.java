@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.themarto.mychatapp.loginActivity.LoginActivity;
+import com.themarto.mychatapp.mainActivity.MainActivity;
 
 public class SplashScreen extends AppCompatActivity {
 

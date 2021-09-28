@@ -9,15 +9,7 @@
         android:roundIcon="@drawable/ic_my_chat_app"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyChatApp">
-        <activity
-            android:name="com.themarto.mychatapp.ChatActivity"
-            android:exported="true" />
-        <activity
-            android:name="com.themarto.mychatapp.UpdateProfile"
-            android:exported="true" />
-        <activity android:name="com.themarto.mychatapp.MainActivity" />
-        <activity android:name="com.themarto.mychatapp.loginActivity.SetProfile" />
-        <activity android:name="com.themarto.mychatapp.loginActivity.OtpAuthentication" />
+        <activity android:name="com.themarto.mychatapp.mainActivity.MainActivity" />
         <activity android:name="com.themarto.mychatapp.loginActivity.LoginActivity" />
         <activity android:name="com.themarto.mychatapp.SplashScreen">
             <intent-filter>

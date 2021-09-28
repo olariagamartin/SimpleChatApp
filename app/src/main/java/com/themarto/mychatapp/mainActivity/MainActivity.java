@@ -1,4 +1,4 @@
-package com.themarto.mychatapp;
+package com.themarto.mychatapp.mainActivity;
 
 import android.os.Bundle;
 

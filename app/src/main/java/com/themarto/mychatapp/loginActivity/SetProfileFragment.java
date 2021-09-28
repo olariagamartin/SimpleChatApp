@@ -23,7 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.themarto.mychatapp.MainActivity;
+import com.themarto.mychatapp.mainActivity.MainActivity;
 import com.themarto.mychatapp.databinding.FragmentSetProfileBinding;
 
 import java.io.ByteArrayOutputStream;

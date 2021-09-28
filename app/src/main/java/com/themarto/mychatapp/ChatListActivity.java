@@ -27,10 +27,6 @@ import com.themarto.mychatapp.databinding.ChatItemviewBinding;
 public class ChatListActivity extends AppCompatActivity {
 
     private ActivityChatListBinding binding;
-    private FirebaseFirestore firebaseFirestore;
-    private FirebaseAuth firebaseAuth;
-
-    FirestoreRecyclerAdapter<UserModel, ChatHolder> chatAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,84 +34,6 @@ public class ChatListActivity extends AppCompatActivity {
         binding = ActivityChatListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-        //Query query = firebaseFirestore.collection("users");
-        // fetch all users except me
-        Query query = firebaseFirestore.collection("users")
-                .whereNotEqualTo("uid", firebaseAuth.getUid());
-
-        FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
-                .setQuery(query, UserModel.class)
-                .setLifecycleOwner(this)
-                .build();
-
-        chatAdapter = new FirestoreRecyclerAdapter<UserModel, ChatHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull ChatHolder holder, int position, @NonNull UserModel model) {
-                holder.binding.chatName.setText(model.getName());
-                String chatImageUri = model.getImage();
-                Picasso.get().load(chatImageUri).into(holder.binding.chatImage);
-                if (model.getStatus().equals("Online")) {
-                    holder.binding.chatStatus.setText(model.getStatus());
-                    holder.binding.chatStatus.setTextColor(Color.BLUE);
-                } else {
-                    // todo: test color on updated
-                    holder.binding.chatStatus.setText(model.getStatus());
-                }
-
-                holder.itemView.setOnClickListener(v -> {
-                    Intent intent = new Intent(ChatListActivity.this, ChatActivity.class);
-                    intent.putExtra("receiverName", model.name);
-                    intent.putExtra("receiverImageUrl", model.getImage());
-                    intent.putExtra("receiverUid", model.getUid());
-                    startActivity(intent);
-                });
-            }
-
-            @NonNull
-            @Override
-            public ChatHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_itemview, parent, false);
-                return new ChatHolder(view);
-            }
-        };
-
-        binding.chatList.setAdapter(chatAdapter);
-        binding.chatList.setLayoutManager(new CustomLinearLayoutManager(getApplicationContext()));
-
-        setOptionMenu();
-
     }
 
-    public class ChatHolder extends RecyclerView.ViewHolder{
-
-        ChatItemviewBinding binding;
-
-        public ChatHolder(@NonNull View itemView) {
-            super(itemView);
-            binding = ChatItemviewBinding.bind(itemView);
-        }
-    }
-
-    public class CustomLinearLayoutManager extends LinearLayoutManager {
-        public CustomLinearLayoutManager(Context context) {
-            super(context);
-        }
-
-        @Override
-        public boolean supportsPredictiveItemAnimations() {
-            return false;
-        }
-    }
-
-    private void setOptionMenu() {
-        MenuItem profile = binding.toolbar.getMenu().add("Profile");
-        profile.setOnMenuItemClickListener(item -> {
-            Intent intent = new Intent(ChatListActivity.this, UpdateProfile.class);
-            startActivity(intent);
-            return true;
-        });
-    }
 }

@@ -10,4 +10,7 @@ public class Constants {
 
     public static final int VERIFICATION_FAILED = 6;
 
+    public static final int VERIFICATION_CODE_EMPTY = 11;
+    public static final int LOGIN_FAILED = 13;
+
 }

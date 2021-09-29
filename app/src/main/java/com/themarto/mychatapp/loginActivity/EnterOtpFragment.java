@@ -19,7 +19,7 @@ import com.themarto.mychatapp.databinding.FragmentEnterOtpBinding;
 public class EnterOtpFragment extends Fragment {
 
     private FragmentEnterOtpBinding binding;
-    String enterOtp;
+    String enterOtp; // todo: move to viewmodel
 
     FirebaseAuth firebaseAuth;
 
@@ -34,12 +34,13 @@ public class EnterOtpFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentEnterOtpBinding.inflate(inflater, container, false);
 
-        setChangeNumberTextListener();
+        // setChangeNumberTextListener(); todo: handle change number action
         setVerifyOtpButtonListener();
 
         return binding.getRoot();
     }
 
+    // todo
     private void setChangeNumberTextListener() {
         binding.changeNumber.setOnClickListener(v -> {
             // todo: test backstack
@@ -52,20 +53,21 @@ public class EnterOtpFragment extends Fragment {
 
     private void setVerifyOtpButtonListener() {
         binding.verifyOtpBtn.setOnClickListener(v -> {
+            // todo: move to viewmodel
             enterOtp = binding.otpEditText.getText().toString();
             if (enterOtp.isEmpty()) {
                 Toast.makeText(requireContext(), "Introduce the code you received", Toast.LENGTH_SHORT).show();
             } else {
                 binding.verifingOtpProgress.setVisibility(View.VISIBLE);
-                // todo: test
-                String codeReceived = EnterOtpFragmentArgs.fromBundle(getArguments()).getOtp();
-                //String codeReceived = "otp"; // getIntent().getStringExtra("otp");
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(codeReceived, enterOtp);
+                // todo: pass to viewmodel
+                String verificationId = EnterOtpFragmentArgs.fromBundle(getArguments()).getVerificationId();
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, enterOtp);
                 signInWithPhoneCredential(credential);
             }
         });
     }
 
+    // todo: move to viewmodel
     private void signInWithPhoneCredential (PhoneAuthCredential credential) {
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

@@ -34,6 +34,7 @@ import java.util.Map;
 public class SetProfileFragment extends Fragment {
 
     private FragmentSetProfileBinding binding;
+    // todo: move to view model except pickPhotoLauncher
     private Uri imagePath;
 
     private FirebaseAuth firebaseAuth;
@@ -50,6 +51,7 @@ public class SetProfileFragment extends Fragment {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
+                    // todo: save on viewmodel
                     imagePath = result.getData().getData();
                     binding.profileImage.setImageURI(imagePath);
                 }
@@ -60,6 +62,7 @@ public class SetProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // todo: move to viewmodel
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
@@ -84,6 +87,7 @@ public class SetProfileFragment extends Fragment {
         });
     }
 
+    // todo: move to viewmodel
     private void setSaveProfileButtonListener () {
         binding.saveProfileBtn.setOnClickListener(v -> {
             username = binding.userName.getText().toString();
@@ -103,6 +107,7 @@ public class SetProfileFragment extends Fragment {
         sendImageToStorage();
     }
 
+    // todo: move to viewmodel
     private void sendImageToStorage () {
         StorageReference imageRef = storageReference
                 .child("images")
@@ -130,6 +135,7 @@ public class SetProfileFragment extends Fragment {
         });
     }
 
+    // todo: move to viewmodel
     private byte[] getCompressedImage() {
         Bitmap bitmap = null;
         try {
@@ -143,6 +149,7 @@ public class SetProfileFragment extends Fragment {
         return byteArrayOutputStream.toByteArray();
     }
 
+    // todo: move to viewmodel
     private void sendDataToCloudFirestore() {
         DocumentReference documentReference = firebaseFirestore
                 .collection("users")
@@ -163,7 +170,7 @@ public class SetProfileFragment extends Fragment {
     }
 
     private void goToMainActivity() {
-        // todo: test backstack
+        // todo: launch from viewmodel
         Intent intent = new Intent(requireActivity(), MainActivity.class);
         startActivity(intent);
         requireActivity().finish();

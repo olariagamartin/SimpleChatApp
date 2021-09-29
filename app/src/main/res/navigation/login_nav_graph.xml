@@ -22,7 +22,7 @@
             app:popUpTo="@id/enterOtpFragment"
             app:popUpToInclusive="true" />
         <argument
-            android:name="otp"
+            android:name="verificationId"
             app:argType="string" />
     </fragment>
     <fragment

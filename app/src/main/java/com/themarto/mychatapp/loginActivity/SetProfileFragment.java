@@ -2,6 +2,9 @@ package com.themarto.mychatapp.loginActivity;
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.themarto.mychatapp.Constants.PROFILE_IMAGE_NOT_SET;
+import static com.themarto.mychatapp.Constants.USERNAME_EMPTY;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,6 +13,7 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,26 +39,14 @@ import java.util.Map;
 public class SetProfileFragment extends Fragment {
 
     private FragmentSetProfileBinding binding;
-    // todo: move to view model except pickPhotoLauncher
-    private Uri imagePath;
 
-    private FirebaseAuth firebaseAuth;
-    private String username;
-
-    private FirebaseStorage firebaseStorage;
-    private StorageReference storageReference;
-
-    private String imageUriAccessToken;
-
-    private FirebaseFirestore firebaseFirestore;
+    private SetProfileViewModel viewModel;
 
     private ActivityResultLauncher<Intent> pickPhotoLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
-                    // todo: save on viewmodel
-                    imagePath = result.getData().getData();
-                    binding.profileImage.setImageURI(imagePath);
+                    viewModel.onPhotoPickActionDone(result.getData().getData());
                 }
             }
     );
@@ -61,12 +54,6 @@ public class SetProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // todo: move to viewmodel
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-        firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -74,99 +61,69 @@ public class SetProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentSetProfileBinding.inflate(inflater, container, false);
 
+        viewModel = new ViewModelProvider(this).get(SetProfileViewModel.class);
+
         setProfileImageListener();
         setSaveProfileButtonListener();
+
+        setupObservers();
 
         return binding.getRoot();
     }
 
     private void setProfileImageListener() {
         binding.profileImage.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            pickPhotoLauncher.launch(intent);
+            viewModel.onProfilePhotoClicked();
         });
     }
 
-    // todo: move to viewmodel
+    private void launchPhotoPicker () {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        pickPhotoLauncher.launch(intent);
+    }
+
     private void setSaveProfileButtonListener () {
         binding.saveProfileBtn.setOnClickListener(v -> {
-            username = binding.userName.getText().toString();
-            if (username.isEmpty()) {
-                Toast.makeText(requireContext(), "Username is empty", Toast.LENGTH_SHORT).show();
-            } else if (imagePath == null) {
-                Toast.makeText(requireContext(), "Choose a profile image", Toast.LENGTH_SHORT).show();
-            } else {
-                binding.saveProfileProgress.setVisibility(View.VISIBLE);
-                sendDataForNewUser();
-                binding.saveProfileProgress.setVisibility(View.INVISIBLE); // todo
-            }
+            String username = binding.userName.getText().toString();
+            viewModel.onSaveProfileClicked(username);
         });
     }
 
-    private void sendDataForNewUser () {
-        sendImageToStorage();
+    private void setupObservers () {
+        viewModel.launchPhotoPicker()
+                .observe(getViewLifecycleOwner(), unused -> launchPhotoPicker());
+
+        viewModel.loadProfileImage()
+                .observe(getViewLifecycleOwner(), unused -> loadProfileImage());
+
+        viewModel.showSnackBarMessage()
+                .observe(getViewLifecycleOwner(), this::showSnackBarMessage);
+
+        viewModel.showProgressBar()
+                .observe(getViewLifecycleOwner(), this::showProgressBar);
+
+        viewModel.goToMainActivity()
+                .observe(getViewLifecycleOwner(), unused -> goToMainActivity());
     }
 
-    // todo: move to viewmodel
-    private void sendImageToStorage () {
-        StorageReference imageRef = storageReference
-                .child("images")
-                .child(firebaseAuth.getUid())
-                .child("profile image");
-
-        byte[] data = getCompressedImage();
-
-        // putting image to storage
-        UploadTask uploadTask = imageRef.putBytes(data);
-
-        uploadTask.addOnSuccessListener(taskSnapshot -> {
-            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                imageUriAccessToken = uri.toString();
-                Toast.makeText(requireContext(), "URI get success", Toast.LENGTH_SHORT).show();
-                sendDataToCloudFirestore();
-            }).addOnFailureListener(e -> {
-                Toast.makeText(requireContext(), "URI get failed", Toast.LENGTH_SHORT).show();
-            });
-
-            Toast.makeText(requireContext(), "Image uploaded", Toast.LENGTH_SHORT).show();
-
-        }).addOnFailureListener(e -> {
-            Toast.makeText(requireContext(), "Image no uploaded", Toast.LENGTH_SHORT).show();
-        });
+    private void loadProfileImage () {
+        binding.profileImage.setImageURI(viewModel.getImagePath());
     }
 
-    // todo: move to viewmodel
-    private byte[] getCompressedImage() {
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), imagePath);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void showSnackBarMessage (int messageCode) {
+        switch (messageCode) {
+            case USERNAME_EMPTY:
+                Snackbar.make(binding.getRoot(), "Username is empty", Snackbar.LENGTH_SHORT).show();
+                break;
+            case PROFILE_IMAGE_NOT_SET:
+                Snackbar.make(binding.getRoot(), "Select a profile image", Snackbar.LENGTH_SHORT).show();
+                break;
         }
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
     }
 
-    // todo: move to viewmodel
-    private void sendDataToCloudFirestore() {
-        DocumentReference documentReference = firebaseFirestore
-                .collection("users")
-                .document(firebaseAuth.getUid());
-
-        Map<String, Object> userData = new HashMap<>();
-        userData.put("name", username);
-        userData.put("image", imageUriAccessToken);
-        userData.put("uid", firebaseAuth.getUid());
-        userData.put("status", "Online");
-
-        documentReference.set(userData).addOnSuccessListener(unused -> {
-            Toast.makeText(requireContext(),
-                    "Data on Cloud Firestore send success",
-                    Toast.LENGTH_SHORT).show();
-            goToMainActivity();
-        });
+    private void showProgressBar (boolean show) {
+        if (show) binding.saveProfileProgress.setVisibility(View.VISIBLE);
+        else binding.saveProfileProgress.setVisibility(View.INVISIBLE);
     }
 
     private void goToMainActivity() {

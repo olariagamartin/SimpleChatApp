@@ -15,6 +15,7 @@ import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.databinding.ChatItemviewBinding;
 
+// todo: rename to ChatAdapter
 public class ChatListAdapter extends FirestoreRecyclerAdapter<UserModel, ChatListAdapter.ChatHolder> {
 
     private ItemClickListener listener;

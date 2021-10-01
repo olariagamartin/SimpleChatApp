@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.themarto.mychatapp.MessageAdapter;
 import com.themarto.mychatapp.MessageModel;
+import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.databinding.FragmentChatBinding;
 
 import java.util.ArrayList;
@@ -29,48 +31,19 @@ public class ChatFragment extends Fragment {
 
     private FragmentChatBinding binding;
 
-    // todo: move to view model
-    private String receiverName;
-    private String receiverImageLink;
-    private String receiverUid;
+    private ChatViewModel viewModel;
 
-    // todo: move to view model
-    private String senderUid;
-
-    // todo: move to view model
-    private String chatRoomId;
-
-    // todo: move to view model
-    private FirebaseAuth firebaseAuth;
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference simpleChatReference;
-
-    private MessageAdapter adapter;
+    private ChatAdapter adapter;
     private LinearLayoutManager layoutManager;
-    private List<MessageModel> messageArrayList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // todo: load on view model factory
-        // pass only the id
-        loadArgs();
-
-        // todo: move to view model
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-
-        // todo: move to view model
-        senderUid = firebaseAuth.getUid();
-
-        // todo: move to view model
-        chatRoomId = getChatRoomId(senderUid, receiverUid);
-
-        // todo: move to view model
-        simpleChatReference = firebaseDatabase.getReference().child("simpleChatRooms")
-                .child(chatRoomId).child("messages");
-
+        ChatFragmentArgs args = ChatFragmentArgs.fromBundle(getArguments());
+        String receiverUid = args.getReceiverUid();
+        ChatViewModelFactory factory = new ChatViewModelFactory(receiverUid);
+        viewModel = new ViewModelProvider(this, factory).get(ChatViewModel.class);
     }
 
     @Override
@@ -82,78 +55,50 @@ public class ChatFragment extends Fragment {
 
         setupMessageList();
 
-        setupToolbar();
+        setupObservers();
 
         return binding.getRoot();
     }
 
+    private void setupObservers() {
+        viewModel.clearMessageField()
+                .observe(getViewLifecycleOwner(), unused -> clearMessageField());
+
+        viewModel.getReceiver()
+                .observe(getViewLifecycleOwner(), this::loadToolbar);
+
+        viewModel.getMessageList()
+                .observe(getViewLifecycleOwner(), this::loadMessages);
+    }
+
+    private void clearMessageField () {
+        binding.messageToSend.setText(null);
+    }
+
     private void setupSendMessageButton () {
         binding.sendBtn.setOnClickListener(v -> {
-            // todo: move to view model
             String message = binding.messageToSend.getText().toString();
-            if (!message.isEmpty()) {
-                Calendar calendar = Calendar.getInstance();
-                long currentTime = calendar.getTimeInMillis();
-                MessageModel messageModel = new MessageModel(message, senderUid, receiverUid, currentTime);
-                simpleChatReference.push().setValue(messageModel);
-
-                binding.messageToSend.setText(null);
-            }
+            viewModel.onSendMessageClicked(message);
         });
     }
 
-    private void loadArgs() {
-        ChatFragmentArgs args = ChatFragmentArgs.fromBundle(getArguments());
-        receiverName = args.getReceiverName();
-        receiverImageLink = args.getReceiverImage();
-        receiverUid = args.getReceiverUid();
-    }
-
-    private void setupToolbar () {
-        binding.chatName.setText(receiverName);
-        Picasso.get().load(receiverImageLink).into(binding.chatImage);
-    }
-
-    // todo: move to utils
-    private String getChatRoomId (String senderId, String receiverId) {
-        if (senderId.compareTo(receiverId) < 0 ) {
-            return senderId + receiverId;
-        } else {
-            return receiverId + senderId;
-        }
+    private void loadToolbar(UserModel receiver) {
+        binding.chatName.setText(receiver.getName());
+        Picasso.get().load(receiver.getImage()).into(binding.chatImage);
     }
 
     private void setupMessageList () {
-        // todo: move adapter to mainActivity package
-        messageArrayList = new ArrayList<MessageModel>();
-        adapter = new MessageAdapter(messageArrayList, senderUid);
+        adapter = new ChatAdapter(viewModel.getSenderUid());
         layoutManager = new LinearLayoutManager(requireContext());
         layoutManager.setStackFromEnd(true);
         binding.messageList.setLayoutManager(layoutManager);
         binding.messageList.setAdapter(adapter);
-
-        fetchMessages();
     }
 
-    // todo: move to view model
-    private void fetchMessages () {
-        simpleChatReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                messageArrayList.clear();
-                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                    MessageModel messageModel = snapshot1.getValue(MessageModel.class);
-                    messageArrayList.add(messageModel);
-                }
-                // todo: use list adapter
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    private void loadMessages (List<MessageModel> messageList) {
+        adapter.submitList(messageList);
+        // todo: scroll
+        //layoutManager.scrollToPosition(adapter.getItemCount());
     }
 
 }

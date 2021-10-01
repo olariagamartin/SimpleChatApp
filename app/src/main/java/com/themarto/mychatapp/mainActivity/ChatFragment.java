@@ -97,8 +97,7 @@ public class ChatFragment extends Fragment {
 
     private void loadMessages (List<MessageModel> messageList) {
         adapter.submitList(messageList);
-        // todo: scroll
-        //layoutManager.scrollToPosition(adapter.getItemCount());
+        binding.messageList.smoothScrollToPosition(adapter.getItemCount());
     }
 
 }

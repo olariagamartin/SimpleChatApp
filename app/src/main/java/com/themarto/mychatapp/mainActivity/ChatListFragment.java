@@ -1,49 +1,32 @@
 package com.themarto.mychatapp.mainActivity;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.squareup.picasso.Picasso;
-import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.UserModel;
-import com.themarto.mychatapp.databinding.ChatItemviewBinding;
 import com.themarto.mychatapp.databinding.FragmentChatListBinding;
+import com.themarto.mychatapp.utils.CustomLinearLayoutManager;
 
 public class ChatListFragment extends Fragment {
 
     private FragmentChatListBinding binding;
 
-    // todo: move to view model
-    private FirebaseFirestore firebaseFirestore;
-    private FirebaseAuth firebaseAuth;
+    private ChatListViewModel viewModel;
 
-    FirestoreRecyclerAdapter<UserModel, ChatHolder> chatAdapter;
+    ChatListAdapter chatAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
     }
 
     @Override
@@ -51,77 +34,34 @@ public class ChatListFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentChatListBinding.inflate(inflater, container, false);
 
-        // todo: move to view model
-        Query query = firebaseFirestore.collection("users")
-                .whereNotEqualTo("uid", firebaseAuth.getUid());
+        viewModel = new ViewModelProvider(this).get(ChatListViewModel.class);
 
-        // todo: move to view model
-        FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
-                .setQuery(query, UserModel.class)
-                .setLifecycleOwner(this)
-                .build();
-
-        // todo: extract class
-        chatAdapter = new FirestoreRecyclerAdapter<UserModel, ChatHolder>(options) {
-            @Override
-            protected void onBindViewHolder(@NonNull ChatHolder holder, int position, @NonNull UserModel model) {
-                holder.binding.chatName.setText(model.getName());
-                String chatImageUri = model.getImage();
-                Picasso.get().load(chatImageUri).into(holder.binding.chatImage);
-                if (model.getStatus().equals("Online")) {
-                    holder.binding.chatStatus.setText(model.getStatus());
-                    holder.binding.chatStatus.setTextColor(Color.BLUE);
-                } else {
-                    // todo: test color on updated
-                    holder.binding.chatStatus.setText(model.getStatus());
-                }
-
-                holder.itemView.setOnClickListener(v -> {
-                    NavDirections action = ChatListFragmentDirections
-                            .actionChatListFragmentToChatFragment(
-                                    model.getUid(),
-                                    model.getName(),
-                                    model.getImage());
-                    Navigation.findNavController(binding.getRoot()).navigate(action);
-                });
-            }
-
-            @NonNull
-            @Override
-            public ChatHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_itemview, parent, false);
-                return new ChatHolder(view);
-            }
-        };
-
-        binding.chatList.setAdapter(chatAdapter);
-        binding.chatList.setLayoutManager(new CustomLinearLayoutManager(requireContext()));
+        setupRecyclerView();
 
         setOptionMenu();
 
         return binding.getRoot();
     }
 
-    public class ChatHolder extends RecyclerView.ViewHolder{
+    private void setupRecyclerView () {
+        FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
+                .setQuery(viewModel.getUsersQuery(), UserModel.class)
+                .setLifecycleOwner(this)
+                .build();
 
-        ChatItemviewBinding binding;
+        chatAdapter = new ChatListAdapter(options, this::goToChatFragment);
 
-        public ChatHolder(@NonNull View itemView) {
-            super(itemView);
-            binding = ChatItemviewBinding.bind(itemView);
-        }
+        binding.chatList.setAdapter(chatAdapter);
+        binding.chatList.setLayoutManager(new CustomLinearLayoutManager(requireContext()));
     }
 
-    // todo: move to utils
-    public class CustomLinearLayoutManager extends LinearLayoutManager {
-        public CustomLinearLayoutManager(Context context) {
-            super(context);
-        }
-
-        @Override
-        public boolean supportsPredictiveItemAnimations() {
-            return false;
-        }
+    private void goToChatFragment (UserModel model) {
+        NavDirections action = ChatListFragmentDirections
+                .actionChatListFragmentToChatFragment(
+                        model.getUid(),
+                        model.getName(),
+                        model.getImage());
+        Navigation.findNavController(binding.getRoot()).navigate(action);
     }
 
     private void setOptionMenu() {

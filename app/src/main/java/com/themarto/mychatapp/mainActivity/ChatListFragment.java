@@ -31,6 +31,7 @@ public class ChatListFragment extends Fragment {
 
     private FragmentChatListBinding binding;
 
+    // todo: move to view model
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
@@ -50,14 +51,17 @@ public class ChatListFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentChatListBinding.inflate(inflater, container, false);
 
+        // todo: move to view model
         Query query = firebaseFirestore.collection("users")
                 .whereNotEqualTo("uid", firebaseAuth.getUid());
 
+        // todo: move to view model
         FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
                 .setQuery(query, UserModel.class)
                 .setLifecycleOwner(this)
                 .build();
 
+        // todo: extract class
         chatAdapter = new FirestoreRecyclerAdapter<UserModel, ChatHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ChatHolder holder, int position, @NonNull UserModel model) {
@@ -73,18 +77,12 @@ public class ChatListFragment extends Fragment {
                 }
 
                 holder.itemView.setOnClickListener(v -> {
-                    // todo: test
                     NavDirections action = ChatListFragmentDirections
                             .actionChatListFragmentToChatFragment(
                                     model.getUid(),
                                     model.getName(),
                                     model.getImage());
                     Navigation.findNavController(binding.getRoot()).navigate(action);
-                    /*Intent intent = new Intent(ChatListActivity.this, ChatActivity.class);
-                    intent.putExtra("receiverName", model.name);
-                    intent.putExtra("receiverImageUrl", model.getImage());
-                    intent.putExtra("receiverUid", model.getUid());
-                    startActivity(intent);*/
                 });
             }
 
@@ -114,6 +112,7 @@ public class ChatListFragment extends Fragment {
         }
     }
 
+    // todo: move to utils
     public class CustomLinearLayoutManager extends LinearLayoutManager {
         public CustomLinearLayoutManager(Context context) {
             super(context);
@@ -128,12 +127,9 @@ public class ChatListFragment extends Fragment {
     private void setOptionMenu() {
         MenuItem profile = binding.toolbar.getMenu().add("Profile");
         profile.setOnMenuItemClickListener(item -> {
-            // todo: test
             NavDirections action = ChatListFragmentDirections
                     .actionChatListFragmentToUpdateProfileFragment();
             Navigation.findNavController(binding.getRoot()).navigate(action);
-            /*Intent intent = new Intent(ChatListActivity.this, UpdateProfile.class);
-            startActivity(intent);*/
             return true;
         });
     }

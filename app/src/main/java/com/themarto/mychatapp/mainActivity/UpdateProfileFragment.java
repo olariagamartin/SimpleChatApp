@@ -38,6 +38,7 @@ import java.io.IOException;
 public class UpdateProfileFragment extends Fragment {
 
     private FragmentUpdateProfileBinding binding;
+    // todo: move all to view model
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
@@ -53,13 +54,10 @@ public class UpdateProfileFragment extends Fragment {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
+                    // todo: notify view model
                     imagePath = result.getData().getData();
 
                     updateProfileImage();
-                    // receive the photo taken
-                    /*Bundle extras = result.getData().getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    binding.profileImage.setImageBitmap(imageBitmap);*/
                 }
             }
     );
@@ -68,6 +66,7 @@ public class UpdateProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // todo: move to view model
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -88,6 +87,7 @@ public class UpdateProfileFragment extends Fragment {
         return binding.getRoot();
     }
 
+    // todo: move to view model
     private void fetchDataFromFirebase() {
         DocumentReference documentReference = firebaseFirestore
                 .collection("users")
@@ -103,11 +103,14 @@ public class UpdateProfileFragment extends Fragment {
         });
     }
 
+    // todo: observe data from view model
     private void loadUserData() {
         Picasso.get().load(user.getImage()).into(binding.profileImage);
         binding.username.setText(user.getName());
     }
 
+    // todo: change name
+    // todo: notify view model
     private void setEditUsernameAction() {
         binding.editUsername.setOnClickListener(v -> {
             showDialogChangeUsername();
@@ -131,6 +134,7 @@ public class UpdateProfileFragment extends Fragment {
 
         builder.setView(editLayout)
                 .setPositiveButton("Save", (dialog, which) -> {
+                    // todo: send to view model
                     updateUsername(username.getText().toString());
                 })
                 .setNegativeButton("Cancel", null);
@@ -141,6 +145,7 @@ public class UpdateProfileFragment extends Fragment {
         dialog.show();
     }
 
+    // todo: move to view model
     private void updateUsername(String username) {
         DocumentReference documentReference = firebaseFirestore
                 .collection("users")
@@ -152,6 +157,7 @@ public class UpdateProfileFragment extends Fragment {
                 });
     }
 
+    // todo: move to view model
     private void updateProfileImage() {
         StorageReference imageRef = storageReference
                 .child("images")
@@ -192,6 +198,7 @@ public class UpdateProfileFragment extends Fragment {
         return byteArrayOutputStream.toByteArray();
     }
 
+    // todo: move to view model
     private void updateProfileImageLink(String link) {
         DocumentReference documentReference = firebaseFirestore
                 .collection("users")

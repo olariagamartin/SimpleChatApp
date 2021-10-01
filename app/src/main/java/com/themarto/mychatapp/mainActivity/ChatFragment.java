@@ -29,14 +29,18 @@ public class ChatFragment extends Fragment {
 
     private FragmentChatBinding binding;
 
+    // todo: move to view model
     private String receiverName;
     private String receiverImageLink;
     private String receiverUid;
 
+    // todo: move to view model
     private String senderUid;
 
+    // todo: move to view model
     private String chatRoomId;
 
+    // todo: move to view model
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference simpleChatReference;
@@ -49,15 +53,21 @@ public class ChatFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // todo: load on view model factory
+        // pass only the id
         loadArgs();
 
+        // todo: move to view model
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
 
+        // todo: move to view model
         senderUid = firebaseAuth.getUid();
 
+        // todo: move to view model
         chatRoomId = getChatRoomId(senderUid, receiverUid);
 
+        // todo: move to view model
         simpleChatReference = firebaseDatabase.getReference().child("simpleChatRooms")
                 .child(chatRoomId).child("messages");
 
@@ -79,6 +89,7 @@ public class ChatFragment extends Fragment {
 
     private void setupSendMessageButton () {
         binding.sendBtn.setOnClickListener(v -> {
+            // todo: move to view model
             String message = binding.messageToSend.getText().toString();
             if (!message.isEmpty()) {
                 Calendar calendar = Calendar.getInstance();
@@ -103,6 +114,7 @@ public class ChatFragment extends Fragment {
         Picasso.get().load(receiverImageLink).into(binding.chatImage);
     }
 
+    // todo: move to utils
     private String getChatRoomId (String senderId, String receiverId) {
         if (senderId.compareTo(receiverId) < 0 ) {
             return senderId + receiverId;
@@ -112,6 +124,7 @@ public class ChatFragment extends Fragment {
     }
 
     private void setupMessageList () {
+        // todo: move adapter to mainActivity package
         messageArrayList = new ArrayList<MessageModel>();
         adapter = new MessageAdapter(messageArrayList, senderUid);
         layoutManager = new LinearLayoutManager(requireContext());
@@ -122,6 +135,7 @@ public class ChatFragment extends Fragment {
         fetchMessages();
     }
 
+    // todo: move to view model
     private void fetchMessages () {
         simpleChatReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -131,6 +145,7 @@ public class ChatFragment extends Fragment {
                     MessageModel messageModel = snapshot1.getValue(MessageModel.class);
                     messageArrayList.add(messageModel);
                 }
+                // todo: use list adapter
                 adapter.notifyDataSetChanged();
             }
 

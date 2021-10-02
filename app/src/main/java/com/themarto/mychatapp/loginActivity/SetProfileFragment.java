@@ -127,7 +127,6 @@ public class SetProfileFragment extends Fragment {
     }
 
     private void goToMainActivity() {
-        // todo: launch from viewmodel
         Intent intent = new Intent(requireActivity(), MainActivity.class);
         startActivity(intent);
         requireActivity().finish();

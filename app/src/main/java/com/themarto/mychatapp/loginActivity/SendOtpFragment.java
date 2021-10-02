@@ -143,7 +143,6 @@ public class SendOtpFragment extends Fragment {
     }
 
     private void goToEnterOtpFragment(String code) {
-        // todo: launch from live data observer
         SendOtpFragmentDirections.ActionSendOtpFragmentToEnterOtpFragment action =
                 SendOtpFragmentDirections.actionSendOtpFragmentToEnterOtpFragment(code);
         Navigation.findNavController(binding.getRoot()).navigate(action);

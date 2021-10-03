@@ -4,9 +4,9 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@drawable/ic_my_chat_app"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_my_chat_app"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyChatApp">
         <activity android:name="com.themarto.mychatapp.mainActivity.MainActivity" />

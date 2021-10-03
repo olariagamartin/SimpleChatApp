@@ -91,7 +91,6 @@ public class EnterOtpFragment extends Fragment {
     }
 
     private void goToSetProfileFragment() {
-        // todo: test backstack
         NavController navController = Navigation.findNavController(binding.getRoot());
         navController
                 .navigate(EnterOtpFragmentDirections.actionEnterOtpFragmentToSetProfileFragment());

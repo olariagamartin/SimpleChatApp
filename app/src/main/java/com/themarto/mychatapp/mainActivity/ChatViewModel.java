@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-// todo: rename to MessageAdapter
 public class ChatViewModel extends ViewModel {
 
     private String receiverUid;

@@ -2,7 +2,6 @@ package com.themarto.mychatapp.mainActivity;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,20 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-import com.themarto.mychatapp.MessageAdapter;
 import com.themarto.mychatapp.MessageModel;
 import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.databinding.FragmentChatBinding;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class ChatFragment extends Fragment {

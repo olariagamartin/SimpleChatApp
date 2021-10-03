@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.themarto.mychatapp.MessageAdapter;
 import com.themarto.mychatapp.MessageModel;
 import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.databinding.MessageReceivedItemviewBinding;

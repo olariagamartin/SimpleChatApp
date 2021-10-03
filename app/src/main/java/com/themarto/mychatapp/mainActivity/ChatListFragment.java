@@ -22,7 +22,7 @@ public class ChatListFragment extends Fragment {
 
     private ChatListViewModel viewModel;
 
-    ChatListAdapter chatAdapter;
+    ChatAdapter chatAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class ChatListFragment extends Fragment {
                 .setLifecycleOwner(this)
                 .build();
 
-        chatAdapter = new ChatListAdapter(options, this::goToChatFragment);
+        chatAdapter = new ChatAdapter(options, this::goToChatFragment);
 
         binding.chatList.setAdapter(chatAdapter);
         binding.chatList.setLayoutManager(new CustomLinearLayoutManager(requireContext()));

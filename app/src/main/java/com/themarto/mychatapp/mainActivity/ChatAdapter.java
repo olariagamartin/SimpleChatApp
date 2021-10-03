@@ -1,108 +1,68 @@
 package com.themarto.mychatapp.mainActivity;
 
-import static com.themarto.mychatapp.utils.Utils.getDate;
-
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.themarto.mychatapp.MessageModel;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.squareup.picasso.Picasso;
 import com.themarto.mychatapp.R;
-import com.themarto.mychatapp.databinding.MessageReceivedItemviewBinding;
-import com.themarto.mychatapp.databinding.MessageSentItemviewBinding;
+import com.themarto.mychatapp.UserModel;
+import com.themarto.mychatapp.databinding.ChatItemviewBinding;
 
-public class ChatAdapter extends ListAdapter<MessageModel, RecyclerView.ViewHolder>{
+public class ChatAdapter extends FirestoreRecyclerAdapter<UserModel, ChatAdapter.ChatHolder> {
 
-    private final static int SENT_MESSAGE = 334;
-    private final static int RECEIVED_MESSAGE = 457;
+    private ItemClickListener listener;
 
-    private String currentUserId;
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     */
+    public ChatAdapter(@NonNull FirestoreRecyclerOptions<UserModel> options,
+                       ItemClickListener listener) {
+        super(options);
+        this.listener = listener;
+    }
 
-    protected ChatAdapter(String currentUserId) {
-        super(new ChatDiffCallback());
-        this.currentUserId = currentUserId;
+    @Override
+    protected void onBindViewHolder(@NonNull ChatHolder holder, int position, @NonNull UserModel model) {
+        holder.binding.chatName.setText(model.getName());
+        String chatImageUri = model.getImage();
+        Picasso.get().load(chatImageUri).into(holder.binding.chatImage);
+        if (model.getStatus().equals("Online")) {
+            holder.binding.chatStatus.setText(model.getStatus());
+            holder.binding.chatStatus.setTextColor(Color.BLUE);
+        } else {
+            // todo: test color on updated
+            holder.binding.chatStatus.setText(model.getStatus());
+        }
+
+        holder.itemView.setOnClickListener(v -> listener.onClick(model));
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == SENT_MESSAGE) {
-            return new SentViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.message_sent_itemview, parent, false));
-        } else {
-            return new ReceivedViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.message_received_itemview, parent, false));
-        }
+    public ChatHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_itemview, parent, false);
+        return new ChatHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        MessageModel message = getItem(position);
-        if (holder.getClass() == SentViewHolder.class) {
-            ((SentViewHolder) holder).bind(message);
-        } else {
-            ((ReceivedViewHolder) holder).bind(message);
-        }
-    }
+    public class ChatHolder extends RecyclerView.ViewHolder{
 
-    @Override
-    public int getItemViewType(int position) {
-        if (getItem(position).getSenderId().equals(currentUserId)) {
-            return SENT_MESSAGE;
-        }
-        else {
-            return RECEIVED_MESSAGE;
-        }
-    }
+        ChatItemviewBinding binding;
 
-    static class SentViewHolder extends RecyclerView.ViewHolder {
-
-        MessageSentItemviewBinding binding;
-
-        public SentViewHolder(@NonNull View itemView) {
+        public ChatHolder(@NonNull View itemView) {
             super(itemView);
-            binding = MessageSentItemviewBinding.bind(itemView);
-        }
-
-        public void bind (MessageModel messageModel) {
-            binding.message.setText(messageModel.getMessage());
-            binding.time.setText(getDate(messageModel.getTimestamp()));
+            binding = ChatItemviewBinding.bind(itemView);
         }
     }
 
-    static class ReceivedViewHolder extends RecyclerView.ViewHolder {
-
-        MessageReceivedItemviewBinding binding;
-
-        public ReceivedViewHolder(@NonNull View itemView) {
-            super(itemView);
-            binding = MessageReceivedItemviewBinding.bind(itemView);
-        }
-
-        public void bind (MessageModel messageModel) {
-            binding.message.setText(messageModel.getMessage());
-            binding.time.setText(getDate(messageModel.getTimestamp()));
-        }
-    }
-
-    public static class ChatDiffCallback extends DiffUtil.ItemCallback<MessageModel> {
-
-        @Override
-        public boolean areItemsTheSame(@NonNull MessageModel oldItem, @NonNull MessageModel newItem) {
-            // todo: change, add id to messages
-            return oldItem.getTimestamp() == newItem.getTimestamp();
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull MessageModel oldItem, @NonNull MessageModel newItem) {
-            // todo: change, implement separation of concerns for models
-            return oldItem.getMessage().equals(newItem.getMessage())
-                    && oldItem.getTimestamp() == newItem.getTimestamp();
-        }
+    public interface ItemClickListener {
+        void onClick (UserModel model);
     }
 }

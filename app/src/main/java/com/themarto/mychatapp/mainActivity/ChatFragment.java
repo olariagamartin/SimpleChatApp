@@ -23,7 +23,7 @@ public class ChatFragment extends Fragment {
 
     private ChatViewModel viewModel;
 
-    private ChatAdapter adapter;
+    private MessageAdapter adapter;
     private LinearLayoutManager layoutManager;
 
     @Override
@@ -78,7 +78,7 @@ public class ChatFragment extends Fragment {
     }
 
     private void setupMessageList () {
-        adapter = new ChatAdapter(viewModel.getSenderUid());
+        adapter = new MessageAdapter(viewModel.getSenderUid());
         layoutManager = new LinearLayoutManager(requireContext());
         layoutManager.setStackFromEnd(true);
         binding.messageList.setLayoutManager(layoutManager);

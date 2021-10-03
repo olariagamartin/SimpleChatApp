@@ -56,12 +56,9 @@ public class ChatListFragment extends Fragment {
     }
 
     private void goToChatFragment (UserModel model) {
-        // todo: remove unnecessary arguments
         NavDirections action = ChatListFragmentDirections
                 .actionChatListFragmentToChatFragment(
-                        model.getUid(),
-                        model.getName(),
-                        model.getImage());
+                        model.getUid());
         Navigation.findNavController(binding.getRoot()).navigate(action);
     }
 

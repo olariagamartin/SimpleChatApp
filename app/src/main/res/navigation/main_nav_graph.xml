@@ -32,10 +32,5 @@
         <argument
             android:name="receiverUid"
             app:argType="string" />
-        <argument
-            android:name="receiverName"
-            app:argType="string" />
-        <argument android:name="receiverImage"
-            app:argType="string" />
     </fragment>
 </navigation>

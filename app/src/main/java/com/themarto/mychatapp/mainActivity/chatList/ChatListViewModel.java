@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.mainActivity;
+package com.themarto.mychatapp.mainActivity.chatList;
 
 import androidx.lifecycle.ViewModel;
 

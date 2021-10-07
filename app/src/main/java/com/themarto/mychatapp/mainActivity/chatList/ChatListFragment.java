@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.mainActivity;
+package com.themarto.mychatapp.mainActivity.chatList;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,7 +22,7 @@ public class ChatListFragment extends Fragment {
 
     private ChatListViewModel viewModel;
 
-    ChatAdapter chatAdapter;
+    ChatListAdapter chatListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,9 +49,9 @@ public class ChatListFragment extends Fragment {
                 .setLifecycleOwner(this)
                 .build();
 
-        chatAdapter = new ChatAdapter(options, this::goToChatFragment);
+        chatListAdapter = new ChatListAdapter(options, this::goToChatFragment);
 
-        binding.chatList.setAdapter(chatAdapter);
+        binding.chatList.setAdapter(chatListAdapter);
         binding.chatList.setLayoutManager(new CustomLinearLayoutManager(requireContext()));
     }
 

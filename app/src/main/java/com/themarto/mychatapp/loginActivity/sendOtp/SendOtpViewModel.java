@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.loginActivity;
+package com.themarto.mychatapp.loginActivity.sendOtp;
 
 import static com.themarto.mychatapp.Constants.EMPTY_NUMBER;
 import static com.themarto.mychatapp.Constants.INVALID_NUMBER;

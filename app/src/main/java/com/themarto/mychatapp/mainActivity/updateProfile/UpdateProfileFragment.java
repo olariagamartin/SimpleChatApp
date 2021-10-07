@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.mainActivity;
+package com.themarto.mychatapp.mainActivity.updateProfile;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -20,9 +20,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.databinding.FragmentUpdateProfileBinding;

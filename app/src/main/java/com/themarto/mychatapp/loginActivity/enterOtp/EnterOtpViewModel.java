@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.loginActivity;
+package com.themarto.mychatapp.loginActivity.enterOtp;
 
 import static com.themarto.mychatapp.Constants.LOGIN_FAILED;
 import static com.themarto.mychatapp.Constants.VERIFICATION_CODE_EMPTY;

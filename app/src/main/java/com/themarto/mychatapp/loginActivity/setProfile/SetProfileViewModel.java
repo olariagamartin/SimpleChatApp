@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.loginActivity;
+package com.themarto.mychatapp.loginActivity.setProfile;
 
 import static com.themarto.mychatapp.Constants.PROFILE_IMAGE_NOT_SET;
 import static com.themarto.mychatapp.Constants.USERNAME_EMPTY;

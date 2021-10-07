@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.loginActivity;
+package com.themarto.mychatapp.loginActivity.enterOtp;
 
 import static com.themarto.mychatapp.Constants.LOGIN_FAILED;
 import static com.themarto.mychatapp.Constants.VERIFICATION_CODE_EMPTY;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,9 +14,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.themarto.mychatapp.databinding.FragmentEnterOtpBinding;
 
 public class EnterOtpFragment extends Fragment {

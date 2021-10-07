@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/sendOtpFragment"
-        android:name="com.themarto.mychatapp.loginActivity.SendOtpFragment"
+        android:name="com.themarto.mychatapp.loginActivity.sendOtp.SendOtpFragment"
         android:label="SendOtpFragment" >
         <action
             android:id="@+id/action_sendOtpFragment_to_enterOtpFragment"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/enterOtpFragment"
-        android:name="com.themarto.mychatapp.loginActivity.EnterOtpFragment"
+        android:name="com.themarto.mychatapp.loginActivity.enterOtp.EnterOtpFragment"
         android:label="EnterOtpFragment" >
         <action
             android:id="@+id/action_enterOtpFragment_to_setProfileFragment"
@@ -27,6 +27,6 @@
     </fragment>
     <fragment
         android:id="@+id/setProfileFragment"
-        android:name="com.themarto.mychatapp.loginActivity.SetProfileFragment"
+        android:name="com.themarto.mychatapp.loginActivity.setProfile.SetProfileFragment"
         android:label="SetProfileFragment" />
 </navigation>

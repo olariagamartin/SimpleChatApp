@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.mainActivity;
+package com.themarto.mychatapp.mainActivity.chat;
 
 import static com.themarto.mychatapp.utils.Utils.getChatRoomId;
 

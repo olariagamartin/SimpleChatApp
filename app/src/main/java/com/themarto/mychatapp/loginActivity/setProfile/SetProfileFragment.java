@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.loginActivity;
+package com.themarto.mychatapp.loginActivity.setProfile;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -6,8 +6,6 @@ import static com.themarto.mychatapp.Constants.PROFILE_IMAGE_NOT_SET;
 import static com.themarto.mychatapp.Constants.USERNAME_EMPTY;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -19,22 +17,10 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.themarto.mychatapp.mainActivity.MainActivity;
 import com.themarto.mychatapp.databinding.FragmentSetProfileBinding;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SetProfileFragment extends Fragment {
 

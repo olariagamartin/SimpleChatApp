@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/chatListFragment"
-        android:name="com.themarto.mychatapp.mainActivity.ChatListFragment"
+        android:name="com.themarto.mychatapp.mainActivity.chatList.ChatListFragment"
         android:label="ChatListFragment" >
         <action
             android:id="@+id/action_chatListFragment_to_chatFragment"
@@ -18,11 +18,11 @@
     </fragment>
     <fragment
         android:id="@+id/updateProfileFragment"
-        android:name="com.themarto.mychatapp.mainActivity.UpdateProfileFragment"
+        android:name="com.themarto.mychatapp.mainActivity.updateProfile.UpdateProfileFragment"
         android:label="UpdateProfileFragment" />
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.themarto.mychatapp.mainActivity.ChatFragment"
+        android:name="com.themarto.mychatapp.mainActivity.chat.ChatFragment"
         android:label="ChatFragment" >
         <argument
             android:name="receiverUid"

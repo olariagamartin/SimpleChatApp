@@ -1,4 +1,4 @@
-package com.themarto.mychatapp.mainActivity;
+package com.themarto.mychatapp.mainActivity.chatList;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -15,7 +15,7 @@ import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.databinding.ChatItemviewBinding;
 
-public class ChatAdapter extends FirestoreRecyclerAdapter<UserModel, ChatAdapter.ChatHolder> {
+public class ChatListAdapter extends FirestoreRecyclerAdapter<UserModel, ChatListAdapter.ChatHolder> {
 
     private ItemClickListener listener;
 
@@ -23,8 +23,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<UserModel, ChatAdapter
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      */
-    public ChatAdapter(@NonNull FirestoreRecyclerOptions<UserModel> options,
-                       ItemClickListener listener) {
+    public ChatListAdapter(@NonNull FirestoreRecyclerOptions<UserModel> options,
+                           ItemClickListener listener) {
         super(options);
         this.listener = listener;
     }

@@ -1,8 +1,10 @@
-package com.themarto.mychatapp.loginActivity;
+package com.themarto.mychatapp.loginActivity.enterOtp;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.themarto.mychatapp.loginActivity.enterOtp.EnterOtpViewModel;
 
 public class EnterOtpViewModelFactory implements ViewModelProvider.Factory {
 

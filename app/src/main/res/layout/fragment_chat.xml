@@ -81,7 +81,7 @@
             android:id="@+id/message_to_send"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:inputType="textCapSentences"
+            android:inputType="textCapSentences|textMultiLine"
             android:layout_marginHorizontal="5dp"
             android:background="@drawable/message_field_background"
             android:hint="Type a message"

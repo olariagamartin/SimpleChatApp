@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -13,43 +15,40 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.squareup.picasso.Picasso;
 import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.UserModel;
+import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.databinding.ChatItemviewBinding;
 
-public class ChatListAdapter extends FirestoreRecyclerAdapter<UserModel, ChatListAdapter.ChatHolder> {
+public class ChatListAdapter extends ListAdapter<ContactModel, ChatListAdapter.ChatHolder> {
 
     private ItemClickListener listener;
 
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     */
-    public ChatListAdapter(@NonNull FirestoreRecyclerOptions<UserModel> options,
-                           ItemClickListener listener) {
-        super(options);
+    protected ChatListAdapter(ItemClickListener listener) {
+        super(new ContactDiffCallback());
         this.listener = listener;
-    }
-
-    @Override
-    protected void onBindViewHolder(@NonNull ChatHolder holder, int position, @NonNull UserModel model) {
-        holder.binding.chatName.setText(model.getName());
-        String chatImageUri = model.getImage();
-        Picasso.get().load(chatImageUri).into(holder.binding.chatImage);
-        if (model.getStatus().equals("Online")) {
-            holder.binding.chatStatus.setText(model.getStatus());
-            holder.binding.chatStatus.setTextColor(Color.BLUE);
-        } else {
-            // todo: test color on updated
-            holder.binding.chatStatus.setText(model.getStatus());
-        }
-
-        holder.itemView.setOnClickListener(v -> listener.onClick(model));
     }
 
     @NonNull
     @Override
     public ChatHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_itemview, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.chat_itemview, parent, false);
         return new ChatHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ChatHolder holder, int position) {
+        ContactModel currentContact = getItem(position);
+        holder.binding.chatName.setText(currentContact.getName());
+        holder.binding.chatImage.setImageBitmap(currentContact.getProfileImage());
+        if (currentContact.isOnline()) {
+            holder.binding.chatStatus.setText("Online");
+            holder.binding.chatStatus.setTextColor(Color.BLUE);
+        } else {
+            // todo: test color on updated
+            holder.binding.chatStatus.setText("Offline");
+        }
+
+        holder.itemView.setOnClickListener(v -> listener.onClick(currentContact));
     }
 
     public class ChatHolder extends RecyclerView.ViewHolder{
@@ -62,7 +61,20 @@ public class ChatListAdapter extends FirestoreRecyclerAdapter<UserModel, ChatLis
         }
     }
 
+    public static class ContactDiffCallback extends DiffUtil.ItemCallback<ContactModel> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull ContactModel oldItem, @NonNull ContactModel newItem) {
+            return oldItem == newItem;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull ContactModel oldItem, @NonNull ContactModel newItem) {
+            return oldItem.getId().equals(newItem.getId());
+        }
+    }
+
     public interface ItemClickListener {
-        void onClick (UserModel model);
+        void onClick (ContactModel contact);
     }
 }

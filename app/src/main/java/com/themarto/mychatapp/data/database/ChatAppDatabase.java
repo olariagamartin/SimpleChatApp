@@ -16,7 +16,7 @@ public abstract class ChatAppDatabase extends RoomDatabase {
 
     private static volatile ChatAppDatabase INSTANCE;
     private final static int NUMBER_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor =
+    public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static ChatAppDatabase getDatabase (final Context context) {

@@ -13,8 +13,11 @@ import androidx.navigation.Navigation;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.themarto.mychatapp.UserModel;
+import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.databinding.FragmentChatListBinding;
 import com.themarto.mychatapp.utils.CustomLinearLayoutManager;
+
+import java.util.List;
 
 public class ChatListFragment extends Fragment {
 
@@ -40,25 +43,30 @@ public class ChatListFragment extends Fragment {
 
         setOptionMenu();
 
+        setupObservers();
+
         return binding.getRoot();
     }
 
-    private void setupRecyclerView () {
-        FirestoreRecyclerOptions<UserModel> options = new FirestoreRecyclerOptions.Builder<UserModel>()
-                .setQuery(viewModel.getUsersQuery(), UserModel.class)
-                .setLifecycleOwner(this)
-                .build();
+    private void setupObservers () {
+        viewModel.getContactList().observe(getViewLifecycleOwner(), this::loadContactList);
+    }
 
-        chatListAdapter = new ChatListAdapter(options, this::goToChatFragment);
+    private void loadContactList (List<ContactModel> contacts) {
+        chatListAdapter.submitList(contacts);
+    }
+
+    private void setupRecyclerView () {
+        chatListAdapter = new ChatListAdapter(this::goToChatFragment);
 
         binding.chatList.setAdapter(chatListAdapter);
         binding.chatList.setLayoutManager(new CustomLinearLayoutManager(requireContext()));
     }
 
-    private void goToChatFragment (UserModel model) {
+    private void goToChatFragment (ContactModel contact) {
         NavDirections action = ChatListFragmentDirections
                 .actionChatListFragmentToChatFragment(
-                        model.getUid());
+                        contact.getId());
         Navigation.findNavController(binding.getRoot()).navigate(action);
     }
 

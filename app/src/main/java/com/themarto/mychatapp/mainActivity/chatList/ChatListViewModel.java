@@ -1,27 +1,54 @@
 package com.themarto.mychatapp.mainActivity.chatList;
 
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
-public class ChatListViewModel extends ViewModel {
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.themarto.mychatapp.data.domain.ContactModel;
+import com.themarto.mychatapp.data.network.ContactDTO;
+import com.themarto.mychatapp.repository.ContactRepository;
 
-    private FirebaseFirestore firebaseFirestore;
-    private FirebaseAuth firebaseAuth;
+import java.util.ArrayList;
+import java.util.List;
 
-    public ChatListViewModel() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+public class ChatListViewModel extends AndroidViewModel {
+
+    private ContactRepository repository;
+
+    public LiveData<List<ContactModel>> contactList;
+
+    public ChatListViewModel(@NonNull Application application) {
+        super(application);
+        repository = ContactRepository.getInstance(application);
+        loadContacts();
+        listenForNetworkUpdates();
     }
 
+    private void loadContacts () {
+        contactList = repository.getAllContacts();
+    }
 
+    private void listenForNetworkUpdates() {
+        repository.getAllContactsFromNetwork().addSnapshotListener((value, error) -> {
+            if (error == null) {
+                List<ContactDTO> contactDTOList = new ArrayList<>();
+                for (QueryDocumentSnapshot doc : value) {
+                    ContactDTO contactDTO = doc.toObject(ContactDTO.class);
+                    contactDTOList.add(contactDTO);
+                }
+                repository.updateLocalDB(contactDTOList);
+            }
+        });
+    }
 
-    public Query getUsersQuery () {
-        Query query = firebaseFirestore.collection("users")
-                .whereNotEqualTo("uid", firebaseAuth.getUid());
-        return query;
+    public LiveData<List<ContactModel>> getContactList () {
+        return contactList;
     }
 }

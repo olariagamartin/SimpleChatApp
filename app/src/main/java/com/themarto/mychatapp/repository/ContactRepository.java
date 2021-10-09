@@ -40,7 +40,7 @@ public class ContactRepository {
         listenForDBChanges();
     }
 
-    static ContactRepository getInstance (Application application) {
+    public static ContactRepository getInstance (Application application) {
         return new ContactRepository(application);
     }
 
@@ -64,7 +64,9 @@ public class ContactRepository {
             taskList.add(task);
         }
         Tasks.whenAllComplete(taskList).addOnCompleteListener(task -> {
-            contactDao.insertContacts(contactEntities);
+            ChatAppDatabase.databaseWriteExecutor.execute(() -> {
+                contactDao.insertContacts(contactEntities);
+            });
         });
 
     }

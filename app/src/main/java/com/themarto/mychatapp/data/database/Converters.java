@@ -22,6 +22,7 @@ public class Converters {
         contactEntity.id = contactDTO.getUid();
         contactEntity.name = contactDTO.getName();
         contactEntity.profileImage = imageData;
+        contactEntity.online = contactDTO.isOnline();
         return contactEntity;
     }
 

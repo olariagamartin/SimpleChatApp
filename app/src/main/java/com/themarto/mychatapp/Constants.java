@@ -16,4 +16,6 @@ public class Constants {
     public static final int USERNAME_EMPTY = 15;
     public static final int PROFILE_IMAGE_NOT_SET = 17;
 
+    public static final long ONE_MEGABYTE = 1024 * 1024;
+
 }

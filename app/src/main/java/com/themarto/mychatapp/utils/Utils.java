@@ -2,6 +2,7 @@ package com.themarto.mychatapp.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 
@@ -36,5 +37,15 @@ public class Utils {
     public static String getDate (long millis) {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
         return sdf.format(new Date(millis));
+    }
+
+    public static Bitmap convertToBitmap (byte[] data) {
+        return BitmapFactory.decodeByteArray(data, 0, data.length);
+    }
+
+    public static byte[] convertToByteCode (Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 }

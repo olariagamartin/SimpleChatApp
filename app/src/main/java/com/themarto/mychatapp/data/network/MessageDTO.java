@@ -1,16 +1,15 @@
-package com.themarto.mychatapp;
+package com.themarto.mychatapp.data.network;
 
-public class MessageModel {
+public class MessageDTO {
 
-    String message;
-    String senderId;
-    String receiverId;
-    long timestamp;
+    private String message;
+    private String senderId;
+    private String receiverId;
+    private long timestamp;
 
-    public MessageModel() {
-    }
+    public MessageDTO() { }
 
-    public MessageModel(String message, String senderId, String receiverId, long timestamp) {
+    public MessageDTO(String message, String senderId, String receiverId, long timestamp) {
         this.message = message;
         this.senderId = senderId;
         this.receiverId = receiverId;

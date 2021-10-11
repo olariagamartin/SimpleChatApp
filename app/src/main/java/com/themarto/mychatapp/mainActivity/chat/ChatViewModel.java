@@ -18,7 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.themarto.mychatapp.MessageModel;
+import com.themarto.mychatapp.data.domain.MessageModel;
 import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.utils.SingleLiveEvent;
 

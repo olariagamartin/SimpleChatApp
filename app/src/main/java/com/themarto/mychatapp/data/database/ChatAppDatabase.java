@@ -9,10 +9,11 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {ContactEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {ContactEntity.class, MessageEntity.class}, version = 1, exportSchema = false)
 public abstract class ChatAppDatabase extends RoomDatabase {
 
     public abstract ContactDao contactDao();
+    public abstract MessageDao messageDao();
 
     private static volatile ChatAppDatabase INSTANCE;
     private final static int NUMBER_OF_THREADS = 4;

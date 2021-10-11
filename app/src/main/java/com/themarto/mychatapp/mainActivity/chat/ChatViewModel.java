@@ -118,8 +118,8 @@ public class ChatViewModel extends ViewModel {
     private void sendMessage (String message) {
         Calendar calendar = Calendar.getInstance();
         long currentTime = calendar.getTimeInMillis();
-        MessageModel messageModel = new MessageModel(message, senderUid, receiverUid, currentTime);
-        simpleChatReference.push().setValue(messageModel);
+        //MessageModel messageModel = new MessageModel(message, senderUid, receiverUid, currentTime);
+        //simpleChatReference.push().setValue(messageModel);
     }
 
 }

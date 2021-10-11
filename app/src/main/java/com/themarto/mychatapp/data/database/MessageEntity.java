@@ -3,10 +3,13 @@ package com.themarto.mychatapp.data.database;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "messages_table")
 public class MessageEntity {
 
+    @PrimaryKey (autoGenerate = true)
+    public long id;
     @ColumnInfo
     public String message;
     @ColumnInfo

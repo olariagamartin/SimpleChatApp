@@ -8,8 +8,9 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "messages_table")
 public class MessageEntity {
 
-    @PrimaryKey (autoGenerate = true)
-    public long id;
+    @PrimaryKey
+    @NonNull
+    public String id;
     @ColumnInfo
     public String message;
     @ColumnInfo

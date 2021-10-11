@@ -36,6 +36,7 @@ public class ChatListViewModel extends AndroidViewModel {
     }
 
     private void listenForNetworkUpdates() {
+        // TODO: detach listener
         repository.getAllContactsFromNetwork().addSnapshotListener((value, error) -> {
             if (error == null) {
                 List<ContactDTO> contactDTOList = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.themarto.mychatapp.data.network;
 
 public class MessageDTO {
 
+    private String key;
     private String message;
     private String senderId;
     private String receiverId;
@@ -9,11 +10,20 @@ public class MessageDTO {
 
     public MessageDTO() { }
 
-    public MessageDTO(String message, String senderId, String receiverId, long timestamp) {
+    public MessageDTO(String key, String message, String senderId, String receiverId, long timestamp) {
+        this.key = key;
         this.message = message;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.timestamp = timestamp;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getMessage() {

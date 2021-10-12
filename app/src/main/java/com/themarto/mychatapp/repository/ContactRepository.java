@@ -27,7 +27,6 @@ import java.util.List;
 public class ContactRepository {
 
     private ContactDao contactDao;
-    private LiveData<List<ContactModel>> contactList;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
@@ -37,7 +36,6 @@ public class ContactRepository {
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
-        listenForDBChanges();
     }
 
     public static ContactRepository getInstance (Application application) {
@@ -45,7 +43,13 @@ public class ContactRepository {
     }
 
     public LiveData<List<ContactModel>> getAllContacts () {
-        return contactList;
+        return Transformations.map(contactDao.getContactList(), contactEntities -> {
+            List<ContactModel> contactModels = new ArrayList<>();
+            for (ContactEntity contactEntity : contactEntities) {
+                contactModels.add(toContactModel(contactEntity));
+            }
+            return contactModels;
+        });
     }
 
     public Query getAllContactsFromNetwork () {
@@ -69,16 +73,6 @@ public class ContactRepository {
             });
         });
 
-    }
-
-    private void listenForDBChanges() {
-        contactList = Transformations.map(contactDao.getContactList(), contactEntities -> {
-            List<ContactModel> contactModels = new ArrayList<>();
-            for (ContactEntity contactEntity : contactEntities) {
-                contactModels.add(toContactModel(contactEntity));
-            }
-            return contactModels;
-        });
     }
 
     private Task<byte[]> getProfileImageFromNetwork (String downloadUrl) {

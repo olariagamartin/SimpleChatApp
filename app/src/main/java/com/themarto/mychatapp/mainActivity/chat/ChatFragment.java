@@ -32,7 +32,8 @@ public class ChatFragment extends Fragment {
 
         ChatFragmentArgs args = ChatFragmentArgs.fromBundle(getArguments());
         String receiverUid = args.getReceiverUid();
-        ChatViewModelFactory factory = new ChatViewModelFactory(receiverUid);
+        ChatViewModelFactory factory = new ChatViewModelFactory(getActivity().getApplication(),
+                receiverUid);
         viewModel = new ViewModelProvider(this, factory).get(ChatViewModel.class);
     }
 
@@ -54,8 +55,8 @@ public class ChatFragment extends Fragment {
         viewModel.clearMessageField()
                 .observe(getViewLifecycleOwner(), unused -> clearMessageField());
 
-        viewModel.getReceiver()
-                .observe(getViewLifecycleOwner(), this::loadToolbar);
+        //viewModel.getReceiver()
+        //        .observe(getViewLifecycleOwner(), this::loadToolbar);
 
         viewModel.getMessageList()
                 .observe(getViewLifecycleOwner(), this::loadMessages);

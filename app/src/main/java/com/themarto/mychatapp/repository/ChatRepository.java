@@ -3,6 +3,7 @@ package com.themarto.mychatapp.repository;
 import static com.themarto.mychatapp.data.database.Converters.toMessageDTO;
 import static com.themarto.mychatapp.data.database.Converters.toMessageEntity;
 import static com.themarto.mychatapp.data.database.Converters.toMessageModel;
+import static com.themarto.mychatapp.utils.Utils.getChatRoomId;
 
 import android.app.Application;
 
@@ -18,6 +19,7 @@ import com.themarto.mychatapp.data.database.MessageDao;
 import com.themarto.mychatapp.data.database.MessageEntity;
 import com.themarto.mychatapp.data.domain.MessageModel;
 import com.themarto.mychatapp.data.network.MessageDTO;
+import com.themarto.mychatapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,26 +28,39 @@ public class ChatRepository {
 
     private MessageDao messageDao;
     private LiveData<List<MessageModel>> messageList;
-    private String chatRoomId;
+    private String receiverId;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference chatReference;
+    private String chatRoomId;
 
-    private ChatRepository (Application application, String chatRoomId) {
+    private ChatRepository (Application application, String receiverId) {
         messageDao = ChatAppDatabase.getDatabase(application).messageDao();
-        this.chatRoomId = chatRoomId;
+        this.receiverId = receiverId;
+
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        chatRoomId = Utils.getChatRoomId(firebaseAuth.getUid(), receiverId);
         chatReference = firebaseDatabase.getReference().child("simpleChatRooms")
                 .child(chatRoomId).child("messages");
+
         listenForDBChanges();
     }
 
-    public static ChatRepository getInstance (Application application, String roomId) {
-        return new ChatRepository(application, roomId);
+    public static ChatRepository getInstance (Application application, String receiverId) {
+        return new ChatRepository(application, receiverId);
     }
 
-    public LiveData<List<MessageModel>> getMessages (String roomId) {
+    public String getSenderUid () {
+        return firebaseAuth.getUid();
+    }
+
+    public String getChatRoomId () {
+        return chatRoomId;
+    }
+
+    public LiveData<List<MessageModel>> getMessages () {
         return messageList;
     }
 
@@ -70,7 +85,8 @@ public class ChatRepository {
     }
 
     private void listenForDBChanges () {
-        messageList = Transformations.map(messageDao.getMessages(chatRoomId), messageEntities -> {
+        LiveData<List<MessageEntity>> messages = messageDao.getMessages(chatRoomId);
+        messageList = Transformations.map(messages, messageEntities -> {
             List<MessageModel> messageModels = new ArrayList<>();
             for (MessageEntity messageEntity : messageEntities) {
                 messageModels.add(toMessageModel(messageEntity));

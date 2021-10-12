@@ -5,11 +5,13 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {ContactEntity.class, MessageEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {ContactEntity.class, MessageEntity.class}, version = 2, exportSchema = false)
 public abstract class ChatAppDatabase extends RoomDatabase {
 
     public abstract ContactDao contactDao();
@@ -25,6 +27,7 @@ public abstract class ChatAppDatabase extends RoomDatabase {
             synchronized (ChatAppDatabase.class) {
                 INSTANCE = Room.databaseBuilder(context,
                         ChatAppDatabase.class, "chat_app_database")
+                        .fallbackToDestructiveMigration()
                         .build();
             }
         }

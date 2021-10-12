@@ -1,67 +1,51 @@
 package com.themarto.mychatapp.mainActivity.chat;
 
-import static com.themarto.mychatapp.utils.Utils.getChatRoomId;
+import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.themarto.mychatapp.data.domain.MessageModel;
 import com.themarto.mychatapp.UserModel;
+import com.themarto.mychatapp.data.domain.MessageModel;
+import com.themarto.mychatapp.data.network.MessageDTO;
+import com.themarto.mychatapp.repository.ChatRepository;
 import com.themarto.mychatapp.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ChatViewModel extends ViewModel {
+public class ChatViewModel extends AndroidViewModel {
 
+    private ChatRepository repository;
     private String receiverUid;
+    private String senderUid;
+    // TODO: change
     private MutableLiveData<UserModel> receiver = new MutableLiveData<>();
 
-    private String senderUid;
-
-    private String chatRoomId;
-
-    private FirebaseAuth firebaseAuth;
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference simpleChatReference;
-    private FirebaseFirestore firebaseFirestore;
-
     private SingleLiveEvent<Void> clearMessageField = new SingleLiveEvent<>();
-    private MutableLiveData<List<MessageModel>> messageList = new MutableLiveData<>();
+    private LiveData<List<MessageModel>> messageList = new MutableLiveData<>();
 
-    public ChatViewModel(String receiverUid) {
+    public ChatViewModel(Application application, String receiverUid) {
+        super(application);
+
         this.receiverUid = receiverUid;
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        repository = ChatRepository.getInstance(application, receiverUid);
 
-        senderUid = firebaseAuth.getUid();
+        this.senderUid = repository.getSenderUid();
 
-        chatRoomId = getChatRoomId(senderUid, receiverUid);
-
-        simpleChatReference = firebaseDatabase.getReference().child("simpleChatRooms")
-                .child(chatRoomId).child("messages");
-
-        loadReceiver();
+        //loadReceiver();
+        listenForNetworkChanges();
         loadMessages();
     }
 
-    private void loadReceiver () {
+    /*private void loadReceiver () {
         firebaseFirestore.collection("users")
                 .document(receiverUid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -71,18 +55,19 @@ public class ChatViewModel extends ViewModel {
                 }
             }
         });
-    }
+    }*/
 
-    private void loadMessages () {
-        simpleChatReference.addValueEventListener(new ValueEventListener() {
+    private void listenForNetworkChanges() {
+        // TODO: detach listener
+        repository.getMessagesFromNetwork().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<MessageModel> messages = new ArrayList<>();
+                List<MessageDTO> messages = new ArrayList<>();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                    MessageModel messageModel = snapshot1.getValue(MessageModel.class);
-                    messages.add(messageModel);
+                    MessageDTO messageDTO = snapshot1.getValue(MessageDTO.class);
+                    messages.add(messageDTO);
                 }
-                messageList.setValue(messages);
+                repository.updateLocalDB(messages);
             }
 
             @Override
@@ -92,12 +77,12 @@ public class ChatViewModel extends ViewModel {
         });
     }
 
-    public LiveData<Void> clearMessageField () {
-        return clearMessageField;
+    private void loadMessages () {
+        messageList = repository.getMessages();
     }
 
-    public LiveData<UserModel> getReceiver () {
-        return receiver;
+    public LiveData<Void> clearMessageField () {
+        return clearMessageField;
     }
 
     public String getSenderUid () {
@@ -118,8 +103,9 @@ public class ChatViewModel extends ViewModel {
     private void sendMessage (String message) {
         Calendar calendar = Calendar.getInstance();
         long currentTime = calendar.getTimeInMillis();
-        //MessageModel messageModel = new MessageModel(message, senderUid, receiverUid, currentTime);
-        //simpleChatReference.push().setValue(messageModel);
+        MessageModel messageModel = new MessageModel(message, senderUid, receiverUid,
+                repository.getSenderUid(), currentTime);
+        repository.sendMessage(messageModel);
     }
 
 }

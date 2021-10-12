@@ -22,7 +22,7 @@
             app:cardCornerRadius="20dp">
 
             <ImageView
-                android:id="@+id/chat_image"
+                android:id="@+id/receiver_profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"

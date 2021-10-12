@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.squareup.picasso.Picasso;
+import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.data.domain.MessageModel;
 import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.databinding.FragmentChatBinding;
@@ -55,8 +56,8 @@ public class ChatFragment extends Fragment {
         viewModel.clearMessageField()
                 .observe(getViewLifecycleOwner(), unused -> clearMessageField());
 
-        //viewModel.getReceiver()
-        //        .observe(getViewLifecycleOwner(), this::loadToolbar);
+        viewModel.getReceiver()
+                .observe(getViewLifecycleOwner(), this::loadToolbar);
 
         viewModel.getMessageList()
                 .observe(getViewLifecycleOwner(), this::loadMessages);
@@ -73,9 +74,9 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    private void loadToolbar(UserModel receiver) {
+    private void loadToolbar(ContactModel receiver) {
         binding.chatName.setText(receiver.getName());
-        Picasso.get().load(receiver.getImage()).into(binding.chatImage);
+        binding.receiverProfileImage.setImageBitmap(receiver.getProfileImage());
     }
 
     private void setupMessageList () {

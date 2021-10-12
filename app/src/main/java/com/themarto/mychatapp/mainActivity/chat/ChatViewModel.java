@@ -10,10 +10,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.themarto.mychatapp.UserModel;
+import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.data.domain.MessageModel;
 import com.themarto.mychatapp.data.network.MessageDTO;
 import com.themarto.mychatapp.repository.ChatRepository;
+import com.themarto.mychatapp.repository.ContactRepository;
 import com.themarto.mychatapp.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
@@ -22,11 +23,11 @@ import java.util.List;
 
 public class ChatViewModel extends AndroidViewModel {
 
-    private ChatRepository repository;
+    private ChatRepository chatRepository;
+    private ContactRepository contactRepository;
     private String receiverUid;
     private String senderUid;
-    // TODO: change
-    private MutableLiveData<UserModel> receiver = new MutableLiveData<>();
+    private LiveData<ContactModel> receiver;
 
     private SingleLiveEvent<Void> clearMessageField = new SingleLiveEvent<>();
     private LiveData<List<MessageModel>> messageList = new MutableLiveData<>();
@@ -36,30 +37,19 @@ public class ChatViewModel extends AndroidViewModel {
 
         this.receiverUid = receiverUid;
 
-        repository = ChatRepository.getInstance(application, receiverUid);
+        chatRepository = ChatRepository.getInstance(application, receiverUid);
+        contactRepository = ContactRepository.getInstance(application);
 
-        this.senderUid = repository.getSenderUid();
+        this.senderUid = chatRepository.getSenderUid();
+        receiver = contactRepository.getContact(receiverUid);
 
-        //loadReceiver();
         listenForNetworkChanges();
         loadMessages();
     }
 
-    /*private void loadReceiver () {
-        firebaseFirestore.collection("users")
-                .document(receiverUid).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (value != null) {
-                    receiver.setValue(value.toObject(UserModel.class));
-                }
-            }
-        });
-    }*/
-
     private void listenForNetworkChanges() {
         // TODO: detach listener
-        repository.getMessagesFromNetwork().addValueEventListener(new ValueEventListener() {
+        chatRepository.getMessagesFromNetwork().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<MessageDTO> messages = new ArrayList<>();
@@ -67,7 +57,7 @@ public class ChatViewModel extends AndroidViewModel {
                     MessageDTO messageDTO = snapshot1.getValue(MessageDTO.class);
                     messages.add(messageDTO);
                 }
-                repository.updateLocalDB(messages);
+                chatRepository.updateLocalDB(messages);
             }
 
             @Override
@@ -78,7 +68,7 @@ public class ChatViewModel extends AndroidViewModel {
     }
 
     private void loadMessages () {
-        messageList = repository.getMessages();
+        messageList = chatRepository.getMessages();
     }
 
     public LiveData<Void> clearMessageField () {
@@ -100,12 +90,16 @@ public class ChatViewModel extends AndroidViewModel {
         return messageList;
     }
 
+    public LiveData<ContactModel> getReceiver () {
+        return receiver;
+    }
+
     private void sendMessage (String message) {
         Calendar calendar = Calendar.getInstance();
         long currentTime = calendar.getTimeInMillis();
         MessageModel messageModel = new MessageModel(message, senderUid, receiverUid,
-                repository.getSenderUid(), currentTime);
-        repository.sendMessage(messageModel);
+                chatRepository.getSenderUid(), currentTime);
+        chatRepository.sendMessage(messageModel);
     }
 
 }

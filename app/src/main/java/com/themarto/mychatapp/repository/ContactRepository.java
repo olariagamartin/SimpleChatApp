@@ -18,6 +18,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.themarto.mychatapp.data.database.ChatAppDatabase;
 import com.themarto.mychatapp.data.database.ContactDao;
 import com.themarto.mychatapp.data.database.ContactEntity;
+import com.themarto.mychatapp.data.database.Converters;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.data.network.ContactDTO;
 
@@ -50,6 +51,10 @@ public class ContactRepository {
             }
             return contactModels;
         });
+    }
+
+    public LiveData<ContactModel> getContact (String id) {
+        return Transformations.map(contactDao.getContact(id), Converters::toContactModel);
     }
 
     public Query getAllContactsFromNetwork () {

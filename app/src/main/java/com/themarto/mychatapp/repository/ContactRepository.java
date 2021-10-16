@@ -12,8 +12,8 @@ import androidx.lifecycle.Transformations;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.themarto.mychatapp.data.database.ChatAppDatabase;
 import com.themarto.mychatapp.data.database.ContactDao;
@@ -28,15 +28,19 @@ import java.util.List;
 public class ContactRepository {
 
     private ContactDao contactDao;
-    private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference contactsRef;
+    private String userId;
 
     private ContactRepository(Application application) {
         contactDao = ChatAppDatabase.getDatabase(application).contactDao();
-        firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        contactsRef = firebaseDatabase.getReference().child("users");
+        userId = firebaseAuth.getUid();
     }
 
     public static ContactRepository getInstance (Application application) {
@@ -47,7 +51,9 @@ public class ContactRepository {
         return Transformations.map(contactDao.getContactList(), contactEntities -> {
             List<ContactModel> contactModels = new ArrayList<>();
             for (ContactEntity contactEntity : contactEntities) {
-                contactModels.add(toContactModel(contactEntity));
+                if (!contactEntity.id.equals(userId)) {
+                    contactModels.add(toContactModel(contactEntity));
+                }
             }
             return contactModels;
         });
@@ -57,9 +63,8 @@ public class ContactRepository {
         return Transformations.map(contactDao.getContact(id), Converters::toContactModel);
     }
 
-    public Query getAllContactsFromNetwork () {
-        return firebaseFirestore.collection("users")
-                .whereNotEqualTo("uid", firebaseAuth.getUid());
+    public DatabaseReference getAllContactsFromNetwork () {
+        return contactsRef;
     }
 
     public void updateLocalDB (List<ContactDTO> contactListUpdated) {
@@ -77,7 +82,6 @@ public class ContactRepository {
                 contactDao.insertContacts(contactEntities);
             });
         });
-
     }
 
     private Task<byte[]> getProfileImageFromNetwork (String downloadUrl) {

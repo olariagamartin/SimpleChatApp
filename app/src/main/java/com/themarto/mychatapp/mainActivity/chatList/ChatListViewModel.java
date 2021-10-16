@@ -5,10 +5,12 @@ import static com.themarto.mychatapp.utils.NetworkConnection.isConnected;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,9 +30,16 @@ public class ChatListViewModel extends AndroidViewModel {
 
     public LiveData<List<ContactModel>> contactList;
 
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
+
     public ChatListViewModel(@NonNull Application application) {
         super(application);
         repository = ContactRepository.getInstance(application);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
         loadContacts();
         listenForNetworkUpdates();
         manageStatus();
@@ -42,16 +51,23 @@ public class ChatListViewModel extends AndroidViewModel {
 
     private void listenForNetworkUpdates() {
         // TODO: detach listener
-        repository.getAllContactsFromNetwork().addSnapshotListener((value, error) -> {
-            if (error == null) {
-                List<ContactDTO> contactDTOList = new ArrayList<>();
-                for (QueryDocumentSnapshot doc : value) {
-                    ContactDTO contactDTO = doc.toObject(ContactDTO.class);
-                    contactDTOList.add(contactDTO);
-                }
-                repository.updateLocalDB(contactDTOList);
-            }
-        });
+        repository.getAllContactsFromNetwork()
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<ContactDTO> contactDTOList = new ArrayList<>();
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                            ContactDTO contactDTO = postSnapshot.getValue(ContactDTO.class);
+                            contactDTOList.add(contactDTO);
+                        }
+                        repository.updateLocalDB(contactDTOList);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     public LiveData<List<ContactModel>> getContactList () {
@@ -63,9 +79,7 @@ public class ChatListViewModel extends AndroidViewModel {
     }
 
     private void manageStatus() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userUid = firebaseAuth.getUid();
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference userStatusDatabaseRef = firebaseDatabase.getReference()
                 .child("users")
                 .child(userUid)

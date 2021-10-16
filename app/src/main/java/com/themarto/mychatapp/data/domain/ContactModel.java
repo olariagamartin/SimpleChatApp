@@ -2,6 +2,8 @@ package com.themarto.mychatapp.data.domain;
 
 import android.graphics.Bitmap;
 
+import java.util.Objects;
+
 public class ContactModel {
     private String id;
     private String name;
@@ -38,5 +40,18 @@ public class ContactModel {
 
     public void setOnline(boolean online) {
         this.online = online;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContactModel that = (ContactModel) o;
+        return online == that.online && id.equals(that.id) && name.equals(that.name) && profileImage.equals(that.profileImage);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, profileImage, online);
     }
 }

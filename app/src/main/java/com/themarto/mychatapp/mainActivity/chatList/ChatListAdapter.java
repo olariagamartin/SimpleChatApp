@@ -76,12 +76,12 @@ public class ChatListAdapter extends ListAdapter<ContactModel, ChatListAdapter.C
 
         @Override
         public boolean areItemsTheSame(@NonNull ContactModel oldItem, @NonNull ContactModel newItem) {
-            return oldItem == newItem;
+            return oldItem.getId().equals(newItem.getId());
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull ContactModel oldItem, @NonNull ContactModel newItem) {
-            return oldItem.getId().equals(newItem.getId());
+            return oldItem.equals(newItem);
         }
     }
 

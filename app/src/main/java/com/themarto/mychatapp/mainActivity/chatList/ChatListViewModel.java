@@ -5,14 +5,16 @@ import static com.themarto.mychatapp.utils.NetworkConnection.isConnected;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.data.network.ContactDTO;
 import com.themarto.mychatapp.repository.ContactRepository;
@@ -31,6 +33,7 @@ public class ChatListViewModel extends AndroidViewModel {
         repository = ContactRepository.getInstance(application);
         loadContacts();
         listenForNetworkUpdates();
+        manageStatus();
     }
 
     private void loadContacts () {
@@ -57,5 +60,33 @@ public class ChatListViewModel extends AndroidViewModel {
 
     public boolean isConnectedToNetwork () {
         return isConnected(getApplication());
+    }
+
+    private void manageStatus() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userUid = firebaseAuth.getUid();
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference userStatusDatabaseRef = firebaseDatabase.getReference()
+                .child("users")
+                .child(userUid)
+                .child("status");
+
+        firebaseDatabase.getReference(".info/connected")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean connected = snapshot.getValue(Boolean.class);
+                        if (connected == false) {
+                            return;
+                        }
+                        userStatusDatabaseRef.onDisconnect().setValue(false);
+                        userStatusDatabaseRef.setValue(true);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 }

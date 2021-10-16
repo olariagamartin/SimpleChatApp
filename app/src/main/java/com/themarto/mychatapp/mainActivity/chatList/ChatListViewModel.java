@@ -69,7 +69,7 @@ public class ChatListViewModel extends AndroidViewModel {
         DatabaseReference userStatusDatabaseRef = firebaseDatabase.getReference()
                 .child("users")
                 .child(userUid)
-                .child("status");
+                .child("online");
 
         firebaseDatabase.getReference(".info/connected")
                 .addValueEventListener(new ValueEventListener() {

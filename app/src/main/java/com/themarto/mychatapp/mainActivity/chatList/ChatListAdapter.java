@@ -22,6 +22,8 @@ public class ChatListAdapter extends ListAdapter<ContactModel, ChatListAdapter.C
 
     private ItemClickListener listener;
 
+    private boolean isConnected = false;
+
     protected ChatListAdapter(ItemClickListener listener) {
         super(new ContactDiffCallback());
         this.listener = listener;
@@ -40,15 +42,24 @@ public class ChatListAdapter extends ListAdapter<ContactModel, ChatListAdapter.C
         ContactModel currentContact = getItem(position);
         holder.binding.chatName.setText(currentContact.getName());
         holder.binding.chatImage.setImageBitmap(currentContact.getProfileImage());
-        if (currentContact.isOnline()) {
-            holder.binding.chatStatus.setText("Online");
-            holder.binding.chatStatus.setTextColor(Color.BLUE);
+        if (isConnected) {
+            if (currentContact.isOnline()) {
+                holder.binding.chatStatus.setText("Online");
+                holder.binding.chatStatus.setTextColor(Color.BLUE);
+            } else {
+                // todo: test color on updated
+                holder.binding.chatStatus.setText("Offline");
+            }
+            holder.binding.chatStatus.setVisibility(View.VISIBLE);
         } else {
-            // todo: test color on updated
-            holder.binding.chatStatus.setText("Offline");
+            holder.binding.chatStatus.setVisibility(View.GONE);
         }
 
         holder.itemView.setOnClickListener(v -> listener.onClick(currentContact));
+    }
+
+    public void setConnected(boolean connected) {
+        isConnected = connected;
     }
 
     public class ChatHolder extends RecyclerView.ViewHolder{

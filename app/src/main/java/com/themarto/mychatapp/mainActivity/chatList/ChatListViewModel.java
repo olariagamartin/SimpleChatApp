@@ -1,5 +1,7 @@
 package com.themarto.mychatapp.mainActivity.chatList;
 
+import static com.themarto.mychatapp.utils.NetworkConnection.isConnected;
+
 import android.app.Application;
 
 import androidx.annotation.NonNull;
@@ -51,5 +53,9 @@ public class ChatListViewModel extends AndroidViewModel {
 
     public LiveData<List<ContactModel>> getContactList () {
         return contactList;
+    }
+
+    public boolean isConnectedToNetwork () {
+        return isConnected(getApplication());
     }
 }

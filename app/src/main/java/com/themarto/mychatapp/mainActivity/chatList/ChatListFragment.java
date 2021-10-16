@@ -54,6 +54,7 @@ public class ChatListFragment extends Fragment {
 
     private void loadContactList (List<ContactModel> contacts) {
         chatListAdapter.submitList(contacts);
+        chatListAdapter.setConnected(viewModel.isConnectedToNetwork());
     }
 
     private void setupRecyclerView () {

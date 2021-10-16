@@ -47,7 +47,7 @@ public class ChatListAdapter extends ListAdapter<ContactModel, ChatListAdapter.C
                 holder.binding.chatStatus.setText("Online");
                 holder.binding.chatStatus.setTextColor(Color.BLUE);
             } else {
-                // todo: test color on updated
+                holder.binding.chatStatus.setTextColor(Color.GRAY);
                 holder.binding.chatStatus.setText("Offline");
             }
             holder.binding.chatStatus.setVisibility(View.VISIBLE);

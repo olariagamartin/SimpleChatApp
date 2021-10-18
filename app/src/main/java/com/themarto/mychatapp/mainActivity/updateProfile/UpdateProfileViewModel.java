@@ -17,45 +17,29 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.themarto.mychatapp.UserModel;
+import com.themarto.mychatapp.data.domain.ContactModel;
+import com.themarto.mychatapp.repository.ContactRepository;
 import com.themarto.mychatapp.utils.SingleLiveEvent;
 
 public class UpdateProfileViewModel extends AndroidViewModel {
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore firebaseFirestore;
+    private ContactRepository contactRepository;
 
-    private FirebaseStorage firebaseStorage;
-    private StorageReference storageReference;
+    private LiveData<ContactModel> user;
 
-    private MutableLiveData<String>  username = new MutableLiveData<>();
-    private MutableLiveData<String>  imageLink = new MutableLiveData<>();
     private SingleLiveEvent<Void> showDialogChangeUsername = new SingleLiveEvent<>();
     private SingleLiveEvent<Void> launchImagePicker = new SingleLiveEvent<>();
     private MutableLiveData<Boolean> showProgressBar = new MutableLiveData<>();
 
     public UpdateProfileViewModel(Application application) {
         super(application);
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        contactRepository = ContactRepository.getInstance(application);
 
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-
-        fetchUserData();
+        user = contactRepository.getUser();
     }
 
-    private void fetchUserData () {
-        DocumentReference documentReference = firebaseFirestore
-                .collection("users")
-                .document(firebaseAuth.getUid());
-        documentReference.get().addOnSuccessListener(documentSnapshot -> {
-            // todo: check for null object
-            UserModel model = documentSnapshot.toObject(UserModel.class);
-            username.setValue(model.getName());
-            imageLink.setValue(model.getImage());
-        }).addOnFailureListener(e -> {
-            // notify error
-        });
+    public LiveData<ContactModel> getUser () {
+        return user;
     }
 
     public void onEditUserNameClicked () {
@@ -66,17 +50,10 @@ public class UpdateProfileViewModel extends AndroidViewModel {
         launchImagePicker.call();
     }
 
-    public void onSaveUsernameClicked (String nUsername) {
+    /*public void onSaveUsernameClicked (String nUsername) {
         updateUsername(nUsername);
-    }
+    }*/
 
-    public LiveData<String> getUsername () {
-        return username;
-    }
-
-    public LiveData<String> getImageLink () {
-        return imageLink;
-    }
     public LiveData<Boolean> showProgressBar () {
         return showProgressBar;
     }
@@ -89,7 +66,7 @@ public class UpdateProfileViewModel extends AndroidViewModel {
         return launchImagePicker;
     }
 
-    private void updateUsername(String nUsername) {
+    /*private void updateUsername(String nUsername) {
         DocumentReference documentReference = firebaseFirestore
                 .collection("users")
                 .document(firebaseAuth.getUid());
@@ -98,9 +75,9 @@ public class UpdateProfileViewModel extends AndroidViewModel {
                 .addOnSuccessListener(unused -> {
                     this.username.setValue(nUsername);
                 });
-    }
+    }*/
 
-    public void onProfileImagePicked (Uri imagePath) {
+    /*public void onProfileImagePicked (Uri imagePath) {
         StorageReference imageRef = storageReference
                 .child("images")
                 .child(firebaseAuth.getUid())
@@ -118,9 +95,9 @@ public class UpdateProfileViewModel extends AndroidViewModel {
             });
             showProgressBar.setValue(false);
         });
-    }
+    }*/
 
-    private void updateProfileImageLink(String link) {
+    /*private void updateProfileImageLink(String link) {
         DocumentReference documentReference = firebaseFirestore
                 .collection("users")
                 .document(firebaseAuth.getUid());
@@ -129,5 +106,5 @@ public class UpdateProfileViewModel extends AndroidViewModel {
                 .addOnSuccessListener(unused -> {
                     imageLink.setValue(link);
                 });
-    }
+    }*/
 }

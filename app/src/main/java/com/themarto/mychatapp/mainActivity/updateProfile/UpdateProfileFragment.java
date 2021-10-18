@@ -22,6 +22,7 @@ import android.widget.EditText;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.squareup.picasso.Picasso;
 import com.themarto.mychatapp.R;
+import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.databinding.FragmentUpdateProfileBinding;
 
 public class UpdateProfileFragment extends Fragment {
@@ -35,7 +36,7 @@ public class UpdateProfileFragment extends Fragment {
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
                     Uri imagePath = result.getData().getData();
-                    viewModel.onProfileImagePicked(imagePath);
+                    //viewModel.onProfileImagePicked(imagePath);
                 }
             }
     );
@@ -59,13 +60,22 @@ public class UpdateProfileFragment extends Fragment {
     }
 
     private void setupObservers () {
-        viewModel.getUsername().observe(getViewLifecycleOwner(), this::loadUsername);
-        viewModel.getImageLink().observe(getViewLifecycleOwner(), this::loadImage);
+        //viewModel.getUsername().observe(getViewLifecycleOwner(), this::loadUsername);
+        //viewModel.getImageLink().observe(getViewLifecycleOwner(), this::loadImage);
+        viewModel.getUser().observe(getViewLifecycleOwner(), this::loadUser);
+
         viewModel.showDialogChangeUsername()
                 .observe(getViewLifecycleOwner(), unused -> showDialogChangeUsername());
+
         viewModel.launchImagePicker()
                 .observe(getViewLifecycleOwner(), unused -> launchImagePicker());
+
         viewModel.showProgressBar().observe(getViewLifecycleOwner(), this::showProgressBar);
+    }
+
+    private void loadUser (ContactModel user) {
+        binding.username.setText(user.getName());
+        binding.profileImage.setImageBitmap(user.getProfileImage());
     }
 
     private void loadUsername(String username) {
@@ -99,14 +109,14 @@ public class UpdateProfileFragment extends Fragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         View editLayout = getLayoutInflater().inflate(R.layout.dialog_update_username, null);
         EditText username = editLayout.findViewById(R.id.username);
-        username.setText(viewModel.getUsername().getValue());
+        //username.setText(viewModel.getUsername().getValue());
         username.requestFocus(); // required for API 28+
         username.setSelection(username.getText().length());
 
         builder.setView(editLayout)
                 .setPositiveButton("Save", (dialog, which) -> {
                     String nUsername = username.getText().toString();
-                    viewModel.onSaveUsernameClicked(nUsername);
+                    //viewModel.onSaveUsernameClicked(nUsername);
                 })
                 .setNegativeButton("Cancel", null);
         // 1: avoid cut the view when keyboard appears, 2: make the keyboard appear

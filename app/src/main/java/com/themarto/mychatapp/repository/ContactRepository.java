@@ -88,4 +88,7 @@ public class ContactRepository {
         return firebaseStorage.getReferenceFromUrl(downloadUrl).getBytes(ONE_MEGABYTE);
     }
 
+    public LiveData<ContactModel> getUser() {
+        return Transformations.map(contactDao.getContact(userId), Converters::toContactModel);
+    }
 }

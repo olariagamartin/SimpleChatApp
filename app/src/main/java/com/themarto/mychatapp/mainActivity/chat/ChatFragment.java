@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -47,6 +48,8 @@ public class ChatFragment extends Fragment {
 
         setupMessageList();
 
+        setupBackButton();
+
         setupObservers();
 
         return binding.getRoot();
@@ -77,6 +80,12 @@ public class ChatFragment extends Fragment {
     private void loadToolbar(ContactModel receiver) {
         binding.chatName.setText(receiver.getName());
         binding.receiverProfileImage.setImageBitmap(receiver.getProfileImage());
+    }
+
+    private void setupBackButton () {
+        binding.toolbar.setNavigationOnClickListener(v -> {
+            Navigation.findNavController(v).navigateUp();
+        });
     }
 
     private void setupMessageList () {

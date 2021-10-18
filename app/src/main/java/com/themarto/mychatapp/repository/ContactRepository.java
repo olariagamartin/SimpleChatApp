@@ -15,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.themarto.mychatapp.data.database.ChatAppDatabase;
 import com.themarto.mychatapp.data.database.ContactDao;
 import com.themarto.mychatapp.data.database.ContactEntity;
@@ -43,11 +45,12 @@ public class ContactRepository {
         userId = firebaseAuth.getUid();
     }
 
-    public static ContactRepository getInstance (Application application) {
+    public static ContactRepository getInstance(Application application) {
         return new ContactRepository(application);
     }
 
-    public LiveData<List<ContactModel>> getAllContacts () {
+    // USER CONTACTS
+    public LiveData<List<ContactModel>> getAllContacts() {
         return Transformations.map(contactDao.getContactList(), contactEntities -> {
             List<ContactModel> contactModels = new ArrayList<>();
             for (ContactEntity contactEntity : contactEntities) {
@@ -59,15 +62,15 @@ public class ContactRepository {
         });
     }
 
-    public LiveData<ContactModel> getContact (String id) {
+    public LiveData<ContactModel> getContact(String id) {
         return Transformations.map(contactDao.getContact(id), Converters::toContactModel);
     }
 
-    public DatabaseReference getAllContactsFromNetwork () {
+    public DatabaseReference getAllContactsFromNetwork() {
         return contactsRef;
     }
 
-    public void updateLocalDB (List<ContactDTO> contactListUpdated) {
+    public void updateLocalDB(List<ContactDTO> contactListUpdated) {
         List<ContactEntity> contactEntities = new ArrayList<>();
         List<Task<byte[]>> taskList = new ArrayList<>();
         for (ContactDTO contactDTO : contactListUpdated) {
@@ -84,11 +87,37 @@ public class ContactRepository {
         });
     }
 
-    private Task<byte[]> getProfileImageFromNetwork (String downloadUrl) {
+    private Task<byte[]> getProfileImageFromNetwork(String downloadUrl) {
         return firebaseStorage.getReferenceFromUrl(downloadUrl).getBytes(ONE_MEGABYTE);
     }
 
+    // CURRENT USER
     public LiveData<ContactModel> getUser() {
         return Transformations.map(contactDao.getContact(userId), Converters::toContactModel);
+    }
+
+    public Task<Void> updateUsername(String username) {
+        return contactsRef.child(userId).child("name").setValue(username);
+    }
+
+    public UploadTask updateProfileImage(byte[] imageData) {
+        StorageReference profileImageRef = firebaseStorage.getReference()
+                .child("images")
+                .child(userId)
+                .child("profile image");
+
+
+        UploadTask uploadTask = profileImageRef.putBytes(imageData);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            profileImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                String imageUriAccessToken = uri.toString();
+                updateProfileImageLink(imageUriAccessToken);
+            });
+        });
+        return uploadTask;
+    }
+
+    private void updateProfileImageLink (String imageUri) {
+        contactsRef.child(userId).child("profileImageLink").setValue(imageUri);
     }
 }

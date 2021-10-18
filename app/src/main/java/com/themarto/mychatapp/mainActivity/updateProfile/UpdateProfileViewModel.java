@@ -50,9 +50,9 @@ public class UpdateProfileViewModel extends AndroidViewModel {
         launchImagePicker.call();
     }
 
-    /*public void onSaveUsernameClicked (String nUsername) {
+    public void onSaveUsernameClicked (String nUsername) {
         updateUsername(nUsername);
-    }*/
+    }
 
     public LiveData<Boolean> showProgressBar () {
         return showProgressBar;
@@ -66,45 +66,20 @@ public class UpdateProfileViewModel extends AndroidViewModel {
         return launchImagePicker;
     }
 
-    /*private void updateUsername(String nUsername) {
-        DocumentReference documentReference = firebaseFirestore
-                .collection("users")
-                .document(firebaseAuth.getUid());
+    private void updateUsername(String nUsername) {
+        contactRepository.updateUsername(nUsername);
+    }
 
-        documentReference.update("name", nUsername)
-                .addOnSuccessListener(unused -> {
-                    this.username.setValue(nUsername);
-                });
-    }*/
-
-    /*public void onProfileImagePicked (Uri imagePath) {
-        StorageReference imageRef = storageReference
-                .child("images")
-                .child(firebaseAuth.getUid())
-                .child("profile image");
-
-        byte[] data  = compressImage(getApplication(), imagePath);
-        UploadTask uploadTask = imageRef.putBytes(data);
-
+    public void onProfileImagePicked (Uri imagePath) {
         showProgressBar.setValue(true);
-
-        uploadTask.addOnSuccessListener(taskSnapshot -> {
-            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                String imageUriAccessToken = uri.toString();
-                updateProfileImageLink(imageUriAccessToken);
-            });
-            showProgressBar.setValue(false);
-        });
-    }*/
-
-    /*private void updateProfileImageLink(String link) {
-        DocumentReference documentReference = firebaseFirestore
-                .collection("users")
-                .document(firebaseAuth.getUid());
-
-        documentReference.update("image", link)
-                .addOnSuccessListener(unused -> {
-                    imageLink.setValue(link);
+        byte[] data  = compressImage(getApplication(), imagePath);
+        contactRepository.updateProfileImage(data)
+                .addOnSuccessListener(taskSnapshot -> {
+                    showProgressBar.setValue(false);
+                })
+                .addOnFailureListener(e -> {
+                    // todo: launch error
+                    showProgressBar.setValue(false);
                 });
-    }*/
+    }
 }

@@ -35,7 +35,7 @@ public class UpdateProfileFragment extends Fragment {
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
                     Uri imagePath = result.getData().getData();
-                    //viewModel.onProfileImagePicked(imagePath);
+                    viewModel.onProfileImagePicked(imagePath);
                 }
             }
     );
@@ -62,7 +62,8 @@ public class UpdateProfileFragment extends Fragment {
         viewModel.getUser().observe(getViewLifecycleOwner(), this::loadUser);
 
         viewModel.showDialogChangeUsername()
-                .observe(getViewLifecycleOwner(), unused -> showDialogChangeUsername());
+                .observe(getViewLifecycleOwner(), unused ->
+                        showDialogChangeUsername(binding.username.getText().toString()));
 
         viewModel.launchImagePicker()
                 .observe(getViewLifecycleOwner(), unused -> launchImagePicker());
@@ -94,18 +95,18 @@ public class UpdateProfileFragment extends Fragment {
         });
     }
 
-    private void showDialogChangeUsername() {
+    private void showDialogChangeUsername(String currentUsername) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         View editLayout = getLayoutInflater().inflate(R.layout.dialog_update_username, null);
         EditText username = editLayout.findViewById(R.id.username);
-        //username.setText(viewModel.getUsername().getValue());
+        username.setText(currentUsername);
         username.requestFocus(); // required for API 28+
         username.setSelection(username.getText().length());
 
         builder.setView(editLayout)
                 .setPositiveButton("Save", (dialog, which) -> {
                     String nUsername = username.getText().toString();
-                    //viewModel.onSaveUsernameClicked(nUsername);
+                    viewModel.onSaveUsernameClicked(nUsername);
                 })
                 .setNegativeButton("Cancel", null);
         // 1: avoid cut the view when keyboard appears, 2: make the keyboard appear

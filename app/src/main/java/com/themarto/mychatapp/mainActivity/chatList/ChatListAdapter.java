@@ -10,11 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.squareup.picasso.Picasso;
 import com.themarto.mychatapp.R;
-import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.databinding.ChatItemviewBinding;
 

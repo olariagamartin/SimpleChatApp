@@ -11,10 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.picasso.Picasso;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.data.domain.MessageModel;
-import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.databinding.FragmentChatBinding;
 
 import java.util.List;

@@ -20,7 +20,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.squareup.picasso.Picasso;
 import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.databinding.FragmentUpdateProfileBinding;
@@ -60,8 +59,6 @@ public class UpdateProfileFragment extends Fragment {
     }
 
     private void setupObservers () {
-        //viewModel.getUsername().observe(getViewLifecycleOwner(), this::loadUsername);
-        //viewModel.getImageLink().observe(getViewLifecycleOwner(), this::loadImage);
         viewModel.getUser().observe(getViewLifecycleOwner(), this::loadUser);
 
         viewModel.showDialogChangeUsername()
@@ -76,14 +73,6 @@ public class UpdateProfileFragment extends Fragment {
     private void loadUser (ContactModel user) {
         binding.username.setText(user.getName());
         binding.profileImage.setImageBitmap(user.getProfileImage());
-    }
-
-    private void loadUsername(String username) {
-        binding.username.setText(username);
-    }
-
-    private void loadImage (String imageLink) {
-        Picasso.get().load(imageLink).into(binding.profileImage);
     }
 
     private void launchImagePicker () {

@@ -11,8 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.databinding.FragmentChatListBinding;
 import com.themarto.mychatapp.utils.CustomLinearLayoutManager;

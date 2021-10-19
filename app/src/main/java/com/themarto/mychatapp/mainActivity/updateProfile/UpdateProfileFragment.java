@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -55,6 +56,8 @@ public class UpdateProfileFragment extends Fragment {
 
         setupObservers();
 
+        setupBackButton();
+
         return binding.getRoot();
     }
 
@@ -74,6 +77,12 @@ public class UpdateProfileFragment extends Fragment {
     private void loadUser (ContactModel user) {
         binding.username.setText(user.getName());
         binding.profileImage.setImageBitmap(user.getProfileImage());
+    }
+
+    private void setupBackButton () {
+        binding.toolbar.setNavigationOnClickListener(v -> {
+            Navigation.findNavController(v).navigateUp();
+        });
     }
 
     private void launchImagePicker () {

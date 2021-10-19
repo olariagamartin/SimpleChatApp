@@ -76,10 +76,6 @@ public class UpdateProfileViewModel extends AndroidViewModel {
         contactRepository.updateProfileImage(data)
                 .addOnSuccessListener(taskSnapshot -> {
                     showProgressBar.setValue(false);
-                })
-                .addOnFailureListener(e -> {
-                    // todo: launch error
-                    showProgressBar.setValue(false);
                 });
     }
 }

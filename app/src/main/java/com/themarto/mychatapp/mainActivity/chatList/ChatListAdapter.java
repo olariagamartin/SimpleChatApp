@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,9 +42,14 @@ public class ChatListAdapter extends ListAdapter<ContactModel, ChatListAdapter.C
         if (isConnected) {
             if (currentContact.isOnline()) {
                 holder.binding.chatStatus.setText(R.string.status_online);
-                holder.binding.chatStatus.setTextColor(Color.BLUE);
+                holder.binding.chatStatus.setTextColor(
+                        ContextCompat.getColor(holder.binding.getRoot().getContext(),
+                                R.color.blue_600_dark));
             } else {
-                holder.binding.chatStatus.setTextColor(Color.GRAY);
+                holder.binding.chatStatus.setTextColor(
+                        ContextCompat.getColor(holder.binding.getRoot().getContext(),
+                                R.color.grey_400)
+                );
                 holder.binding.chatStatus.setText(R.string.status_offline);
             }
             holder.binding.chatStatus.setVisibility(View.VISIBLE);

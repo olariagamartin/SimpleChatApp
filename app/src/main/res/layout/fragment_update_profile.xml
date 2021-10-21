@@ -9,7 +9,7 @@
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/design_default_color_primary"
+        android:background="@color/baby_powder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -18,9 +18,9 @@
             android:id="@+id/toolbar"
             app:contentInsetStartWithNavigation="0dp"
             app:title="@string/profile_toolbar_title"
-            app:titleTextColor="@color/white"
+            app:titleTextColor="@color/grey_900"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:navigationIconTint="@color/white"
+            app:navigationIconTint="@color/grey_900"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -51,6 +51,7 @@
         android:layout_height="30dp"
         android:src="@drawable/ic_person"
         android:layout_marginEnd="10dp"
+        app:tint="@color/grey_900"
         app:layout_constraintBottom_toBottomOf="@+id/username"
         app:layout_constraintEnd_toStartOf="@+id/username"
         app:layout_constraintTop_toTopOf="@+id/username" />
@@ -64,7 +65,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/username"
         app:layout_constraintStart_toEndOf="@+id/username"
         app:layout_constraintTop_toTopOf="@+id/username"
-        app:tint="@color/black" />
+        app:tint="@color/grey_900" />
 
     <TextView
         android:id="@+id/username"

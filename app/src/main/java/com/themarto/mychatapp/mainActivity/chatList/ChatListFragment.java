@@ -1,5 +1,6 @@
 package com.themarto.mychatapp.mainActivity.chatList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,6 +15,8 @@ import androidx.navigation.Navigation;
 import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.databinding.FragmentChatListBinding;
+import com.themarto.mychatapp.loginActivity.LoginActivity;
+import com.themarto.mychatapp.mainActivity.MainActivity;
 import com.themarto.mychatapp.utils.CustomLinearLayoutManager;
 
 import java.util.List;
@@ -49,6 +52,10 @@ public class ChatListFragment extends Fragment {
 
     private void setupObservers () {
         viewModel.getContactList().observe(getViewLifecycleOwner(), this::loadContactList);
+
+        viewModel.goToUpdateProfile().observe(getViewLifecycleOwner(), unused -> goToUpdateProfile());
+
+        viewModel.goToLoginActivity().observe(getViewLifecycleOwner(), unused -> goToLoginActivity());
     }
 
     private void loadContactList (List<ContactModel> contacts) {
@@ -70,13 +77,27 @@ public class ChatListFragment extends Fragment {
         Navigation.findNavController(binding.getRoot()).navigate(action);
     }
 
+    private void goToUpdateProfile () {
+        NavDirections action = ChatListFragmentDirections
+                .actionChatListFragmentToUpdateProfileFragment();
+        Navigation.findNavController(binding.getRoot()).navigate(action);
+    }
+
+    private void goToLoginActivity () {
+        Intent intent = new Intent(requireActivity(), LoginActivity.class);
+        startActivity(intent);
+        requireActivity().finish();
+    }
+
     private void setOptionMenu() {
-        MenuItem profile = binding.toolbar.getMenu().add(R.string.menu_item_profile);
-        profile.setOnMenuItemClickListener(item -> {
-            NavDirections action = ChatListFragmentDirections
-                    .actionChatListFragmentToUpdateProfileFragment();
-            Navigation.findNavController(binding.getRoot()).navigate(action);
-            return true;
+        binding.toolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.go_to_profile: viewModel.onProfileItemClicked();
+                    return true;
+                case R.id.sign_out: viewModel.onLogoutItemClicked();
+                    return true;
+                default: return true;
+            }
         });
     }
 

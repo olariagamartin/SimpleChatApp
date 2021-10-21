@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.data.network.ContactDTO;
 import com.themarto.mychatapp.repository.ContactRepository;
+import com.themarto.mychatapp.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,11 @@ public class ChatListViewModel extends AndroidViewModel {
 
     private ContactRepository repository;
 
-    public LiveData<List<ContactModel>> contactList;
+    private LiveData<List<ContactModel>> contactList;
+
+    private SingleLiveEvent<Void> goToUpdateProfile = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<Void> goToLoginActivity = new SingleLiveEvent<>();
 
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
@@ -74,11 +79,29 @@ public class ChatListViewModel extends AndroidViewModel {
         return contactList;
     }
 
+    public void onProfileItemClicked () {
+        goToUpdateProfile.call();
+    }
+
+    public LiveData<Void> goToUpdateProfile () {
+        return goToUpdateProfile;
+    }
+
+    public void onLogoutItemClicked () {
+        firebaseAuth.signOut();
+        goToLoginActivity.call();
+    }
+
+    public LiveData<Void> goToLoginActivity () {
+        return goToLoginActivity;
+    }
+
     public boolean isConnectedToNetwork () {
         return isConnected(getApplication());
     }
 
     private void manageStatus() {
+        // todo: move to repository
         String userUid = firebaseAuth.getUid();
         DatabaseReference userStatusDatabaseRef = firebaseDatabase.getReference()
                 .child("users")

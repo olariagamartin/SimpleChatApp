@@ -1,6 +1,11 @@
 package com.themarto.mychatapp.repository;
 
 import static com.themarto.mychatapp.Constants.ONE_MEGABYTE;
+import static com.themarto.mychatapp.Constants.RealtimeDatabasePaths.PROFILE_IMAGE_LINK;
+import static com.themarto.mychatapp.Constants.RealtimeDatabasePaths.USERNAME;
+import static com.themarto.mychatapp.Constants.RealtimeDatabasePaths.USERS;
+import static com.themarto.mychatapp.Constants.StoragePaths.IMAGES;
+import static com.themarto.mychatapp.Constants.StoragePaths.PROFILE_IMAGE;
 import static com.themarto.mychatapp.data.database.Converters.toContactEntity;
 import static com.themarto.mychatapp.data.database.Converters.toContactModel;
 
@@ -41,7 +46,7 @@ public class ContactRepository {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        contactsRef = firebaseDatabase.getReference().child("users");
+        contactsRef = firebaseDatabase.getReference().child(USERS);
         userId = firebaseAuth.getUid();
     }
 
@@ -97,14 +102,14 @@ public class ContactRepository {
     }
 
     public Task<Void> updateUsername(String username) {
-        return contactsRef.child(userId).child("name").setValue(username);
+        return contactsRef.child(userId).child(USERNAME).setValue(username);
     }
 
     public UploadTask updateProfileImage(byte[] imageData) {
         StorageReference profileImageRef = firebaseStorage.getReference()
-                .child("images")
+                .child(IMAGES)
                 .child(userId)
-                .child("profile image");
+                .child(PROFILE_IMAGE);
 
 
         UploadTask uploadTask = profileImageRef.putBytes(imageData);
@@ -118,6 +123,6 @@ public class ContactRepository {
     }
 
     private void updateProfileImageLink (String imageUri) {
-        contactsRef.child(userId).child("profileImageLink").setValue(imageUri);
+        contactsRef.child(userId).child(PROFILE_IMAGE_LINK).setValue(imageUri);
     }
 }

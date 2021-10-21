@@ -1,9 +1,10 @@
 package com.themarto.mychatapp.repository;
 
+import static com.themarto.mychatapp.Constants.RealtimeDatabasePaths.MESSAGES;
+import static com.themarto.mychatapp.Constants.RealtimeDatabasePaths.SIMPLE_CHAT_ROOMS;
 import static com.themarto.mychatapp.data.database.Converters.toMessageDTO;
 import static com.themarto.mychatapp.data.database.Converters.toMessageEntity;
 import static com.themarto.mychatapp.data.database.Converters.toMessageModel;
-import static com.themarto.mychatapp.utils.Utils.getChatRoomId;
 
 import android.app.Application;
 
@@ -42,8 +43,8 @@ public class ChatRepository {
         firebaseDatabase = FirebaseDatabase.getInstance();
 
         chatRoomId = Utils.getChatRoomId(firebaseAuth.getUid(), receiverId);
-        chatReference = firebaseDatabase.getReference().child("simpleChatRooms")
-                .child(chatRoomId).child("messages");
+        chatReference = firebaseDatabase.getReference().child(SIMPLE_CHAT_ROOMS)
+                .child(chatRoomId).child(MESSAGES);
 
         listenForDBChanges();
     }

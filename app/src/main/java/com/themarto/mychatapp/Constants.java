@@ -18,4 +18,17 @@ public class Constants {
 
     public static final long ONE_MEGABYTE = 1024 * 1024;
 
+    public static class RealtimeDatabasePaths {
+        public static String SIMPLE_CHAT_ROOMS = "simpleChatRooms";
+        public static String MESSAGES = "messages";
+        public static String USERS = "users";
+        public static String USERNAME = "name";
+        public static String PROFILE_IMAGE_LINK = "profileImageLink";
+    }
+
+    public static class StoragePaths {
+        public static String IMAGES = "images";
+        public static String PROFILE_IMAGE = "profile image";
+    }
+
 }

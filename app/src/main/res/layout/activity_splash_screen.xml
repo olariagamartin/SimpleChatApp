@@ -16,7 +16,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="from"
+        android:text="@string/from_message"
         android:layout_above="@id/author_text"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"/>
@@ -25,7 +25,7 @@
         android:id="@+id/author_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TheMarto"
+        android:text="@string/dev_nickname"
         android:textSize="24sp"
         android:textColor="#212121"
         android:layout_alignParentBottom="true"

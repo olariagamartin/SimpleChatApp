@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Username"
+        android:hint="@string/hint_for_username_field"
         android:layout_marginTop="15dp"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintEnd_toEndOf="parent"

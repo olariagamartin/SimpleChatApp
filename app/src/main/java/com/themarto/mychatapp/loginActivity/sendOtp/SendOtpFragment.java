@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.databinding.FragmentSendOtpBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -91,13 +92,13 @@ public class SendOtpFragment extends Fragment {
     private void showSnackBarMessage(int messageCode) {
         switch (messageCode) {
             case EMPTY_NUMBER:
-                Snackbar.make(binding.getRoot(), "Please enter a phone number", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.enter_phone_number_message, Snackbar.LENGTH_SHORT).show();
                 break;
             case INVALID_NUMBER:
-                Snackbar.make(binding.getRoot(), "Invalid phone number", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.invalid_phone_number_message, Snackbar.LENGTH_SHORT).show();
                 break;
             case VERIFICATION_FAILED:
-                Snackbar.make(binding.getRoot(), "Verification failed", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.verification_failed_message, Snackbar.LENGTH_SHORT).show();
                 break;
         }
     }

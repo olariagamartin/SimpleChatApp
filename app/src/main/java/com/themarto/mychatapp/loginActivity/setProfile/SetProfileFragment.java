@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.mainActivity.MainActivity;
 import com.themarto.mychatapp.databinding.FragmentSetProfileBinding;
 
@@ -99,10 +100,10 @@ public class SetProfileFragment extends Fragment {
     private void showSnackBarMessage (int messageCode) {
         switch (messageCode) {
             case USERNAME_EMPTY:
-                Snackbar.make(binding.getRoot(), "Username is empty", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.username_empty_message, Snackbar.LENGTH_SHORT).show();
                 break;
             case PROFILE_IMAGE_NOT_SET:
-                Snackbar.make(binding.getRoot(), "Select a profile image", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.profile_image_not_set_message, Snackbar.LENGTH_SHORT).show();
                 break;
         }
     }

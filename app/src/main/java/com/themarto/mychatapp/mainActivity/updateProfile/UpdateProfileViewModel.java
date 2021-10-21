@@ -4,19 +4,11 @@ import static com.themarto.mychatapp.utils.Utils.compressImage;
 
 import android.app.Application;
 import android.net.Uri;
-import android.view.View;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.themarto.mychatapp.UserModel;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.repository.ContactRepository;
 import com.themarto.mychatapp.utils.SingleLiveEvent;

@@ -15,8 +15,6 @@ import com.themarto.mychatapp.utils.SingleLiveEvent;
 
 public class EnterOtpViewModel extends ViewModel {
 
-    private String enteredOtp;
-
     private FirebaseAuth firebaseAuth;
 
     private String verificationId;

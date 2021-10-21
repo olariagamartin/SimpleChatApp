@@ -40,11 +40,11 @@ public class ChatListAdapter extends ListAdapter<ContactModel, ChatListAdapter.C
         holder.binding.chatImage.setImageBitmap(currentContact.getProfileImage());
         if (isConnected) {
             if (currentContact.isOnline()) {
-                holder.binding.chatStatus.setText("Online");
+                holder.binding.chatStatus.setText(R.string.status_online);
                 holder.binding.chatStatus.setTextColor(Color.BLUE);
             } else {
                 holder.binding.chatStatus.setTextColor(Color.GRAY);
-                holder.binding.chatStatus.setText("Offline");
+                holder.binding.chatStatus.setText(R.string.status_offline);
             }
             holder.binding.chatStatus.setVisibility(View.VISIBLE);
         } else {

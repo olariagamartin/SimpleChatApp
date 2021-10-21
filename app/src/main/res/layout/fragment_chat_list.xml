@@ -19,7 +19,7 @@
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chats"
+            android:text="@string/toolbar_title_chats"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"

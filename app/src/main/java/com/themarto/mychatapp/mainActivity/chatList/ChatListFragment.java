@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.databinding.FragmentChatListBinding;
 import com.themarto.mychatapp.utils.CustomLinearLayoutManager;
@@ -70,7 +71,7 @@ public class ChatListFragment extends Fragment {
     }
 
     private void setOptionMenu() {
-        MenuItem profile = binding.toolbar.getMenu().add("Profile");
+        MenuItem profile = binding.toolbar.getMenu().add(R.string.menu_item_profile);
         profile.setOnMenuItemClickListener(item -> {
             NavDirections action = ChatListFragmentDirections
                     .actionChatListFragmentToUpdateProfileFragment();

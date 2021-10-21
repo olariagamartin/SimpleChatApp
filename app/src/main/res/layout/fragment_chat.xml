@@ -42,7 +42,7 @@
                 android:id="@+id/chat_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username"
+                tools:text="Username"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:layout_marginStart="15dp" />
@@ -94,7 +94,7 @@
             android:inputType="textCapSentences|textMultiLine"
             android:layout_marginHorizontal="5dp"
             android:background="@drawable/message_field_background"
-            android:hint="Type a message"
+            android:hint="@string/hint_for_message_field"
             android:paddingStart="20dp"
             android:paddingEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"

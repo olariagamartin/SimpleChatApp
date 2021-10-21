@@ -14,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.databinding.FragmentEnterOtpBinding;
 
 public class EnterOtpFragment extends Fragment {
@@ -78,10 +79,10 @@ public class EnterOtpFragment extends Fragment {
     private void showSnackBarMessage (int messageCode) {
         switch (messageCode) {
             case VERIFICATION_CODE_EMPTY:
-                Snackbar.make(binding.getRoot(), "Please enter the code you received", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.enter_code_received_message, Snackbar.LENGTH_SHORT).show();
                 break;
             case LOGIN_FAILED:
-                Snackbar.make(binding.getRoot(), "Login failed", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.login_failed_message, Snackbar.LENGTH_SHORT).show();
                 break;
         }
     }

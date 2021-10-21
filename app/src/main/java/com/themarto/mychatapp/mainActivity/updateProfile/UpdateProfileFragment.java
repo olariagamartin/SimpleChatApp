@@ -113,11 +113,11 @@ public class UpdateProfileFragment extends Fragment {
         username.setSelection(username.getText().length());
 
         builder.setView(editLayout)
-                .setPositiveButton("Save", (dialog, which) -> {
+                .setPositiveButton(R.string.save_button, (dialog, which) -> {
                     String nUsername = username.getText().toString();
                     viewModel.onSaveUsernameClicked(nUsername);
                 })
-                .setNegativeButton("Cancel", null);
+                .setNegativeButton(R.string.cancel_button, null);
         // 1: avoid cut the view when keyboard appears, 2: make the keyboard appear
         AlertDialog dialog = builder.create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN

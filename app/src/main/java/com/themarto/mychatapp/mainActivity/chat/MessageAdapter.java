@@ -100,7 +100,6 @@ public class MessageAdapter extends ListAdapter<MessageModel, RecyclerView.ViewH
 
         @Override
         public boolean areContentsTheSame(@NonNull MessageModel oldItem, @NonNull MessageModel newItem) {
-            // todo: change, implement separation of concerns for models
             return oldItem.getMessage().equals(newItem.getMessage())
                     && oldItem.getTimestamp() == newItem.getTimestamp();
         }

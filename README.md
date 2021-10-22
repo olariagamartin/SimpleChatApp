@@ -9,16 +9,9 @@ Instant messaging app with basic functionalities:
 
 ### Display
 
-<img src="./screenshots/screenshot_enter_phone_number.jpg" width="30%" height="30%">
-
-<img src="./screenshots/screenshot_enter_received_code.jpg" width="30%" height="30%">
-
-<img src="./screenshots/screenshot_profile.jpg" width="30%" height="30%">
-
-<img src="./screenshots/screenshot_chat_list.jpg" width="30%" height="30%">
-
+<img src="./screenshots/screenshot_enter_phone_number.jpg" width="30%" height="30%"> <img src="./screenshots/screenshot_enter_received_code.jpg" width="30%" height="30%"> 
+<img src="./screenshots/screenshot_profile.jpg" width="30%" height="30%"><img src="./screenshots/screenshot_chat_list.jpg" width="30%" height="30%">
 <img src="./screenshots/screenshot_chat.jpg" width="30%" height="30%">
-
 
 ### Profile
 

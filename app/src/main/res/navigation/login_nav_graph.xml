@@ -10,7 +10,9 @@
         android:label="SendOtpFragment" >
         <action
             android:id="@+id/action_sendOtpFragment_to_enterOtpFragment"
-            app:destination="@id/enterOtpFragment" />
+            app:destination="@id/enterOtpFragment"
+            app:popUpTo="@id/sendOtpFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/enterOtpFragment"

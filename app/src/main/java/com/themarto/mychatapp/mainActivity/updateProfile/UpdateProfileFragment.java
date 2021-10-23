@@ -96,7 +96,7 @@ public class UpdateProfileFragment extends Fragment {
     }
 
     private void setupClickActions() {
-        binding.editUsername.setOnClickListener(v -> {
+        binding.usernameContainer.setOnClickListener(v -> {
             viewModel.onEditUserNameClicked();
         });
         binding.profileImage.setOnClickListener(v -> {

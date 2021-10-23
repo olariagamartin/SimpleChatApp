@@ -100,7 +100,7 @@
             android:layout_weight="0.15"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit"
-            app:tint="@color/green_a_400_dark" />
+            app:tint="@color/light_blue_400_dark" />
 
     </LinearLayout>
 

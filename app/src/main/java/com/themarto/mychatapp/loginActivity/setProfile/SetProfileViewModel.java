@@ -12,30 +12,30 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.themarto.mychatapp.repository.ContactRepository;
 import com.themarto.mychatapp.utils.SingleLiveEvent;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SetProfileViewModel extends AndroidViewModel {
 
+    private ContactRepository contactRepository;
+
     private Uri imagePath;
 
-    private FirebaseAuth firebaseAuth;
     private String username;
 
-    private FirebaseStorage firebaseStorage;
-    private StorageReference storageReference;
-
     private String imageUriAccessToken;
-
-    private FirebaseFirestore firebaseFirestore;
 
     private SingleLiveEvent<Void> launchPhotoPicker = new SingleLiveEvent<>();
     private SingleLiveEvent<Void> loadProfileImage = new SingleLiveEvent<>();
@@ -45,10 +45,8 @@ public class SetProfileViewModel extends AndroidViewModel {
 
     public SetProfileViewModel(@NonNull Application application) {
         super(application);
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+
+        contactRepository = ContactRepository.getInstance(getApplication());
     }
 
     public Uri getImagePath () {
@@ -96,40 +94,12 @@ public class SetProfileViewModel extends AndroidViewModel {
         }
     }
 
-    // todo: move to repository
     // todo: handle no network connection
     private void saveUserData() {
-        StorageReference imageRef = storageReference
-                .child("images")
-                .child(firebaseAuth.getUid())
-                .child("profile image");
-
         byte[] data = compressImage(getApplication().getApplicationContext(), imagePath);
-        UploadTask uploadTask = imageRef.putBytes(data);
-        uploadTask.addOnSuccessListener(taskSnapshot -> {
-            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                imageUriAccessToken = uri.toString();
-                sendDataToFirestore();
-            });
-        });
-    }
-
-    private void sendDataToFirestore () {
-        DocumentReference documentReference = firebaseFirestore
-                .collection("users")
-                .document(firebaseAuth.getUid());
-
-        documentReference.set(getUserData()).addOnSuccessListener(unused -> {
+        List<Task<?>> tasks = contactRepository.setUserProfile(username, data);
+        Tasks.whenAllComplete(tasks).addOnCompleteListener(task -> {
             goToMainActivity.call();
         });
-    }
-
-    private Map<String, Object> getUserData () {
-        Map<String, Object> userData = new HashMap<>();
-        userData.put("name", username);
-        userData.put("image", imageUriAccessToken);
-        userData.put("uid", firebaseAuth.getUid());
-        userData.put("status", "Online");
-        return userData;
     }
 }

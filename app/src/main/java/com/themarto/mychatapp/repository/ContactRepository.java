@@ -97,6 +97,15 @@ public class ContactRepository {
     }
 
     // CURRENT USER
+    public List<Task<?>> setUserProfile (String username, byte[] profileImage) {
+        List<Task<?>> tasks = new ArrayList<>();
+        Task<Void> setUsername = updateUsername(username);
+        tasks.add(setUsername);
+        UploadTask setProfileImage = updateProfileImage(profileImage);
+        tasks.add(setProfileImage);
+        return tasks;
+    }
+
     public LiveData<ContactModel> getUser() {
         return Transformations.map(contactDao.getContact(userId), Converters::toContactModel);
     }
@@ -110,7 +119,6 @@ public class ContactRepository {
                 .child(IMAGES)
                 .child(userId)
                 .child(PROFILE_IMAGE);
-
 
         UploadTask uploadTask = profileImageRef.putBytes(imageData);
         uploadTask.addOnSuccessListener(taskSnapshot -> {

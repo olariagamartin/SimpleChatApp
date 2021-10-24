@@ -35,8 +35,6 @@ public class SetProfileViewModel extends AndroidViewModel {
 
     private String username;
 
-    private String imageUriAccessToken;
-
     private SingleLiveEvent<Void> launchPhotoPicker = new SingleLiveEvent<>();
     private SingleLiveEvent<Void> loadProfileImage = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> showSnackBarMessage = new SingleLiveEvent<>();

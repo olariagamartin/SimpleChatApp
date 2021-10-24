@@ -18,14 +18,17 @@ public class EnterOtpViewModel extends ViewModel {
     private FirebaseAuth firebaseAuth;
 
     private String verificationId;
+    private String phoneNumber;
 
     private SingleLiveEvent<Integer> showSnackBarMessage = new SingleLiveEvent<>();
     private MutableLiveData<Boolean> showProgressBar = new MutableLiveData<>();
     private SingleLiveEvent<Void> goToSetProfile = new SingleLiveEvent<>();
+    private SingleLiveEvent<Void> restartLogin = new SingleLiveEvent<>();
 
-    public EnterOtpViewModel(String verificationId) {
+    public EnterOtpViewModel(String verificationId, String phoneNumber) {
         firebaseAuth = FirebaseAuth.getInstance();
         this.verificationId = verificationId;
+        this.phoneNumber = phoneNumber;
     }
 
     public LiveData<Integer> showSnackBarMessage () {
@@ -40,6 +43,14 @@ public class EnterOtpViewModel extends ViewModel {
         return goToSetProfile;
     }
 
+    public LiveData<Void> restartLogin () {
+        return restartLogin;
+    }
+
+    public String getPhoneNumber () {
+        return phoneNumber;
+    }
+
     public void onVerifyOtp(String enterOtp) {
         if (enterOtp.isEmpty()) {
             showSnackBarMessage.setValue(VERIFICATION_CODE_EMPTY);
@@ -49,6 +60,10 @@ public class EnterOtpViewModel extends ViewModel {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, enterOtp);
             signInWithPhoneCredential(credential);
         }
+    }
+
+    public void onChangePhoneNumber () {
+        restartLogin.call();
     }
 
     private void signInWithPhoneCredential (PhoneAuthCredential credential) {

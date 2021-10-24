@@ -26,6 +26,9 @@
         <argument
             android:name="verificationId"
             app:argType="string" />
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/setProfileFragment"

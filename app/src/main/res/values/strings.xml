@@ -20,9 +20,10 @@
     <string name="hint_for_username_field">Username</string>
     <string name="hint_for_message_field">Type a message</string>
     <string name="toolbar_title_chats">Chats</string>
-    <string name="enter_code_received_tip">Enter the code you received</string>
+    <string name="tip_code_sent_to">We have sent a code to</string>
     <string name="hint_otp_code_field">Code received here</string>
-    <string name="clickable_text_change_phone_number">Ditn\'t received? Chage your number</string>
+    <string name="code_not_received_question">Code not received?</string>
+    <string name="change_phone_number">Change phone number</string>
     <string name="button_verify">Verify</string>
     <string name="send_otp_tip">We will send a verification code to the entered number via SMS</string>
     <string name="enter_number_hint">Your number phone</string>

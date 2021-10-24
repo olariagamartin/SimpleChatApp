@@ -3,6 +3,7 @@ package com.themarto.mychatapp.loginActivity.enterOtp;
 import static com.themarto.mychatapp.Constants.LOGIN_FAILED;
 import static com.themarto.mychatapp.Constants.VERIFICATION_CODE_EMPTY;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,26 +34,23 @@ public class EnterOtpFragment extends Fragment {
         binding = FragmentEnterOtpBinding.inflate(inflater, container, false);
 
         String verificationId = EnterOtpFragmentArgs.fromBundle(getArguments()).getVerificationId();
-        EnterOtpViewModelFactory factory = new EnterOtpViewModelFactory(verificationId);
+        String phoneNumber  = EnterOtpFragmentArgs.fromBundle(getArguments()).getPhoneNumber();
+        EnterOtpViewModelFactory factory = new EnterOtpViewModelFactory(verificationId, phoneNumber);
 
         viewModel = new ViewModelProvider(this,  factory).get(EnterOtpViewModel.class);
 
-        // setChangeNumberTextListener(); todo: handle change number action
+        setChangeNumberTextListener();
         setVerifyOtpButtonListener();
+        setPhoneNumber();
 
         setupObservers();
 
         return binding.getRoot();
     }
 
-    // todo
     private void setChangeNumberTextListener() {
         binding.changeNumber.setOnClickListener(v -> {
-            // todo: test backstack
-            Navigation.findNavController(binding.getRoot()).navigateUp();
-            /*Intent intent = new Intent(OtpAuthentication.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);*/
+            viewModel.onChangePhoneNumber();
         });
     }
 
@@ -63,12 +61,18 @@ public class EnterOtpFragment extends Fragment {
         });
     }
 
+    private void setPhoneNumber () {
+        binding.phoneNumber.setText(viewModel.getPhoneNumber());
+    }
+
     private void setupObservers () {
         viewModel.showProgressBar().observe(getViewLifecycleOwner(), this::showProgressBar);
 
         viewModel.showSnackBarMessage().observe(getViewLifecycleOwner(), this::showSnackBarMessage);
 
         viewModel.goToSetProfile().observe(getViewLifecycleOwner(), unused -> goToSetProfileFragment());
+
+        viewModel.restartLogin().observe(getViewLifecycleOwner(), unused -> restartActivity());
     }
 
     private void showProgressBar (boolean show) {
@@ -91,5 +95,11 @@ public class EnterOtpFragment extends Fragment {
         NavController navController = Navigation.findNavController(binding.getRoot());
         navController
                 .navigate(EnterOtpFragmentDirections.actionEnterOtpFragmentToSetProfileFragment());
+    }
+
+    private void restartActivity () {
+        Intent intent = requireActivity().getIntent();
+        requireActivity().finish();
+        startActivity(intent);
     }
 }

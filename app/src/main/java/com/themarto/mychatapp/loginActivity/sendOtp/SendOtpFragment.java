@@ -145,7 +145,8 @@ public class SendOtpFragment extends Fragment {
 
     private void goToEnterOtpFragment(String code) {
         SendOtpFragmentDirections.ActionSendOtpFragmentToEnterOtpFragment action =
-                SendOtpFragmentDirections.actionSendOtpFragmentToEnterOtpFragment(code);
+                SendOtpFragmentDirections.actionSendOtpFragmentToEnterOtpFragment(code,
+                        viewModel.getFullPhoneNumber());
         Navigation.findNavController(binding.getRoot()).navigate(action);
     }
 }

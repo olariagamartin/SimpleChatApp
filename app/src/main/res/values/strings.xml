@@ -24,7 +24,7 @@
     <string name="hint_otp_code_field">Code received here</string>
     <string name="clickable_text_change_phone_number">Ditn\'t received? Chage your number</string>
     <string name="button_verify">Verify</string>
-    <string name="send_otp_tip">We will send a verification code to the entered number</string>
+    <string name="send_otp_tip">We will send a verification code to the entered number via SMS</string>
     <string name="enter_number_hint">Your number phone</string>
     <string name="button_send_message">Send Message</string>
     <string name="set_profile_tip">Setup your profile</string>

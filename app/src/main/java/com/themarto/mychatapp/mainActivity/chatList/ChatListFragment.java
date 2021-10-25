@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.themarto.mychatapp.R;
 import com.themarto.mychatapp.data.domain.ContactModel;
 import com.themarto.mychatapp.databinding.FragmentChatListBinding;
@@ -55,6 +56,8 @@ public class ChatListFragment extends Fragment {
 
         viewModel.goToUpdateProfile().observe(getViewLifecycleOwner(), unused -> goToUpdateProfile());
 
+        viewModel.showLogoutAlertDialog().observe(getViewLifecycleOwner(), unused -> showLogoutAlertDialog());
+
         viewModel.goToLoginActivity().observe(getViewLifecycleOwner(), unused -> goToLoginActivity());
     }
 
@@ -87,6 +90,16 @@ public class ChatListFragment extends Fragment {
         Intent intent = new Intent(requireActivity(), LoginActivity.class);
         startActivity(intent);
         requireActivity().finish();
+    }
+
+    private void showLogoutAlertDialog () {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+        builder.setTitle(R.string.logout_alert_title);
+        builder.setPositiveButton(R.string.logout, (dialog, which) -> {
+            viewModel.logout();
+        });
+        builder.setNegativeButton(R.string.cancel_button, (dialog, which) -> { });
+        builder.create().show();
     }
 
     private void setOptionMenu() {

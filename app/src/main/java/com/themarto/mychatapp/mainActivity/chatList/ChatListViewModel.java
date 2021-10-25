@@ -35,6 +35,8 @@ public class ChatListViewModel extends AndroidViewModel {
 
     private SingleLiveEvent<Void> goToLoginActivity = new SingleLiveEvent<>();
 
+    private SingleLiveEvent<Void> showLogoutAlertDialog = new SingleLiveEvent<>();
+
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
 
@@ -88,6 +90,10 @@ public class ChatListViewModel extends AndroidViewModel {
     }
 
     public void onLogoutItemClicked () {
+        showLogoutAlertDialog.call();
+    }
+
+    public void logout () {
         firebaseAuth.signOut();
         goToLoginActivity.call();
     }
@@ -95,6 +101,8 @@ public class ChatListViewModel extends AndroidViewModel {
     public LiveData<Void> goToLoginActivity () {
         return goToLoginActivity;
     }
+
+    public LiveData<Void> showLogoutAlertDialog () { return showLogoutAlertDialog; }
 
     public boolean isConnectedToNetwork () {
         return isConnected(getApplication());

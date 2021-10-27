@@ -48,7 +48,6 @@ public class ChatViewModel extends AndroidViewModel {
     }
 
     private void listenForNetworkChanges() {
-        // TODO: detach listener
         chatRepository.getMessagesFromNetwork().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

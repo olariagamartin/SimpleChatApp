@@ -57,7 +57,6 @@ public class ChatListViewModel extends AndroidViewModel {
     }
 
     private void listenForNetworkUpdates() {
-        // TODO: detach listener
         repository.getAllContactsFromNetwork()
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -109,7 +108,6 @@ public class ChatListViewModel extends AndroidViewModel {
     }
 
     private void manageStatus() {
-        // todo: move to repository
         String userUid = firebaseAuth.getUid();
         DatabaseReference userStatusDatabaseRef = firebaseDatabase.getReference()
                 .child("users")

@@ -94,7 +94,6 @@ public class MessageAdapter extends ListAdapter<MessageModel, RecyclerView.ViewH
 
         @Override
         public boolean areItemsTheSame(@NonNull MessageModel oldItem, @NonNull MessageModel newItem) {
-            // todo: change, add id to messages
             return oldItem.getTimestamp() == newItem.getTimestamp();
         }
 

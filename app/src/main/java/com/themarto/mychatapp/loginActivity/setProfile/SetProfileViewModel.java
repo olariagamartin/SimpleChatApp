@@ -92,7 +92,6 @@ public class SetProfileViewModel extends AndroidViewModel {
         }
     }
 
-    // todo: handle no network connection
     private void saveUserData() {
         byte[] data = compressImage(getApplication().getApplicationContext(), imagePath);
         List<Task<?>> tasks = contactRepository.setUserProfile(username, data);

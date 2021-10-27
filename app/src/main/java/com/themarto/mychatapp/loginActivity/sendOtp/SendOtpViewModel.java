@@ -74,7 +74,6 @@ public class SendOtpViewModel extends ViewModel {
     }
 
     public void verificationFailed () {
-        // todo: provide feedback to the user
         showSnackBarMessage.setValue(VERIFICATION_FAILED);
     }
 }
